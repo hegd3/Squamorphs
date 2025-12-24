@@ -4,6 +4,7 @@ import com.hedge.squamorphs.client.animations.squamorphAnimation;
 import com.hedge.squamorphs.entity.ModEntities;
 import com.hedge.squamorphs.entity.living.SquamorphEntity;
 import com.hedge.squamorphs.entity.living.summons.ElementalFlyEntity;
+import com.hedge.squamorphs.entity.projectile.BlastProjectile;
 import com.hedge.squamorphs.entity.projectile.BoltProjectile;
 import com.hedge.squamorphs.entity.projectile.SonarProjectile;
 import com.hedge.squamorphs.entity.projectile.SquamorphProjectile;
@@ -50,8 +51,16 @@ public class AllParts {
             return projectile;
         }
     };
-    public static final SquamorphHead HEAD4 = new SquamorphHead(4, 30, "crowned head", false) {
-
+    public static final SquamorphHead HEAD4 = new SquamorphHead(4, 100, "crowned head", false) {
+        @Override
+        public SquamorphProjectile getProjectile(SquamorphEntity entity, Level level) {
+            BlastProjectile projectile = ModEntities.BLAST.get().create(level);
+            if (projectile != null) {
+                projectile.setOwner(entity);
+                projectile.setElementIndex(entity.getPrimaryElementIndex());
+            }
+            return projectile;
+        }
     };
     public static final SquamorphHead HEAD5 = new SquamorphHead(5, 30, "head spike", false) {
         @Override

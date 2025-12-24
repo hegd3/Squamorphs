@@ -24,8 +24,8 @@ public class BoltProjectile extends SquamorphProjectile {
     protected void onHitEntity(EntityHitResult hit) {
         super.onHitEntity(hit);
         if (this.getOwner() != null) {
-            hit.getEntity().hurt(this.getOwner().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), 3);
-            this.element.applyElement(hit.getEntity(), (SquamorphEntity)this.getOwner(), 5, 5);
+            hit.getEntity().hurt(this.getOwner().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), 3 + this.getLvl() * 3);
+            this.element.applyElement(hit.getEntity(), (SquamorphEntity)this.getOwner(), this.getLvl(), 5);
         }
     }
 

@@ -66,7 +66,7 @@ public class ElementalFlyEntity extends SquamorphSummon {
             this.attackCD = Math.max(this.attackCD - 1, 0);
         } else {
             animTicks++;
-            if (animTicks >= 5) {
+            if (animTicks >= 10) {
                 LivingEntity target = this.getTarget();
                 if (target != null && this.distanceToSqr(target) <= this.getAttackRangeSqr(target)) {
                     this.doHurtTarget(target);
@@ -95,6 +95,11 @@ public class ElementalFlyEntity extends SquamorphSummon {
         super.summon(entity, elementIndex, summonLevel);
         this.setLifespan(200 + summonLevel * 30);
         this.moveTo(entity.getX(), entity.getY(), entity.getZ());
+        this.setYRot(entity.getYRot());
+        this.yRotO = entity.yRotO;
+        this.setXRot(entity.getXRot());
+        this.xRotO = entity.xRotO;
+        this.setDeltaMovement(this.getLookAngle());
         this.setTarget(entity.getTarget());
     }
 

@@ -11,11 +11,10 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 
-public class SonarProjectile extends SquamorphProjectile {
+public class BlastProjectile extends SquamorphProjectile {
 
-    private int bounces = 3;
 
-    public SonarProjectile(EntityType<? extends Projectile> pEntityType, Level pLevel) {
+    public BlastProjectile(EntityType<? extends Projectile> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.setNoGravity(true);
     }
@@ -24,34 +23,25 @@ public class SonarProjectile extends SquamorphProjectile {
     protected void onHitEntity(EntityHitResult hit) {
         super.onHitEntity(hit);
         if (this.getOwner() != null) {
-            hit.getEntity().hurt(this.getOwner().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), 5 + this.getLvl() * 2);
+            hit.getEntity().hurt(this.getOwner().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), 8 + this.getLvl() * 2);
             this.element.applyElement(hit.getEntity(), (SquamorphEntity)this.getOwner(), this.getLvl(), 5);
         }
     }
 
-
     @Override
     protected void onHitBlock(BlockHitResult blockHitResult) {
-        bounces--;
         super.onHitBlock(blockHitResult);
-        if (bounces < 0)
-            discard();
-        else {
-            this.setDeltaMovement(this.getDeltaMovement().scale(-1.05).offsetRandom(this.random, 0.5f));
-            this.setYRot(this.getYRot() + 180.0F);
-            this.yRotO += 180.0F;
-        }
+        discard();
     }
 
     @Override
     public float getSpeed() {
-        return 2.2f;
+        return 1.8f;
     }
-
 
     @Override
     public void trailParticles() {
-        /* Vec3 v = getDeltaMovement();
+        Vec3 v = getDeltaMovement();
         double length = v.length();
         int c = (int)Math.min(20, Math.round(length) * 3) + 1;
         float f = (float)length / c;
@@ -61,11 +51,7 @@ public class SonarProjectile extends SquamorphProjectile {
             this.level().addParticle(this.element.getParticle(), this.getX() + rand.x + p.x,
                     this.getY() + rand.y + p.y, this.getZ() + rand.z + p.z, rand.x, rand.z, rand.y);
         }
-
-         */
     }
-
-
 
 
 }

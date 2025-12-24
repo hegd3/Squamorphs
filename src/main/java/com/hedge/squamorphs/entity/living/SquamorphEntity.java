@@ -160,6 +160,9 @@ public class SquamorphEntity extends Animal {
              */
             tickAttack(this.getTarget());
             tickCooldown();
+            if (!this.isAggressive() && this.tickCount % 100 == 0) {
+                this.heal(2);
+            }
         }
     }
 
@@ -266,6 +269,8 @@ public class SquamorphEntity extends Animal {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putInt("primary_element", this.getPrimaryElementIndex());
+        tag.putInt("secondary_element", this.getSecondaryElementIndex());
         tag.putInt("head_type", this.getHeadType());
         tag.putInt("body_type", this.getBodyType());
         tag.putInt("mouth_type", this.getMouthType());
@@ -282,6 +287,8 @@ public class SquamorphEntity extends Animal {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.setPrimaryElementIndex(tag.getInt("primary_element"));
+        this.setSecondaryElementIndex(tag.getInt("secondary_element"));
         this.setHeadType(tag.getInt("head_type"));
         this.setBodyType(tag.getInt("body_type"));
         this.setMouthType(tag.getInt("mouth_type"));

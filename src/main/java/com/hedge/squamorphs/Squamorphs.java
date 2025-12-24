@@ -1,9 +1,6 @@
 package com.hedge.squamorphs;
 
-import com.hedge.squamorphs.client.renderer.BoltRenderer;
-import com.hedge.squamorphs.client.renderer.ElementalFlyRenderer;
-import com.hedge.squamorphs.client.renderer.SonarRenderer;
-import com.hedge.squamorphs.client.renderer.SquamorphRenderer;
+import com.hedge.squamorphs.client.renderer.*;
 import com.hedge.squamorphs.entity.ModEntities;
 import com.hedge.squamorphs.items.ModCreativeModeTab;
 import com.hedge.squamorphs.items.ModItems;
@@ -89,6 +86,8 @@ public class Squamorphs
             EntityRenderers.register(ModEntities.BOLT.get(), BoltRenderer::new);
 
             EntityRenderers.register(ModEntities.SONAR.get(), SonarRenderer::new);
+
+            EntityRenderers.register(ModEntities.BLAST.get(), BlastRenderer::new);
 
         }
     }

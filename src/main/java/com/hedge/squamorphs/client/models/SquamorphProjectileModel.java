@@ -39,6 +39,7 @@ public class SquamorphProjectileModel extends EntityModel<SquamorphProjectile> {
 
 	@Override
 	public void setupAnim(SquamorphProjectile entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.root.x = -180;
 	}
 
 	@Override
