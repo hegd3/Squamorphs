@@ -35,6 +35,7 @@ public abstract class SquamorphProjectile extends Projectile {
 
     private static final EntityDataAccessor<Integer> ELEMENT = SynchedEntityData.defineId(SquamorphProjectile.class, EntityDataSerializers.INT);
 
+    private int lvl = 0;
 
     public abstract float getSpeed();
 
@@ -187,6 +188,14 @@ public abstract class SquamorphProjectile extends Projectile {
 
     public int getElementIndex() {
         return this.entityData.get(ELEMENT);
+    }
+
+    public void setLvl(int level) {
+        this.lvl = level;
+    }
+
+    public int getLvl() {
+        return this.lvl;
     }
 
     @Override

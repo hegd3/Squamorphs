@@ -27,5 +27,4 @@ public class SquamorphWings extends SquamorphBody {
 
 
 
-
 }

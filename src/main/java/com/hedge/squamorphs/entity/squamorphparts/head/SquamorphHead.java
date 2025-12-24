@@ -28,6 +28,7 @@ public class SquamorphHead extends SquamorphPart {
         return projectile;
     }
 
+    @Override
     public void performRangedAttack(SquamorphEntity owner, LivingEntity pTarget) {
         SquamorphProjectile projectile = this.getProjectile(owner, owner.level());
         if (projectile != null) {
@@ -65,7 +66,9 @@ public class SquamorphHead extends SquamorphPart {
     @Override
     public void tickAttack(SquamorphEntity entity, int animTicks, LivingEntity target, double dist) {
         if (animTicks >= 8) {
-            entity.performRangedAttack(target, 2);
+            this.performRangedAttack(entity, entity.getTarget());
+            entity.setHeadCD(this.getCooldown());
+            entity.setAttackState(0);
         }
     }
 }

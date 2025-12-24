@@ -23,6 +23,10 @@ public class SquamorphPart {
     public void applyStats(SquamorphEntity owner) {
     }
 
+    public void removeStats(SquamorphEntity owner) {
+
+    }
+
     public int getColor(SquamorphEntity owner) {
         return owner.getPrimaryColor();
     }
@@ -35,7 +39,14 @@ public class SquamorphPart {
 
     }
 
-    public AnimationDefinition getAbilityAnim() {
+    public boolean canUseAbility(SquamorphEntity owner, LivingEntity target) {
+        return false;
+    }
+
+    public void performRangedAttack(SquamorphEntity owner, LivingEntity pTarget) {
+    }
+
+        public AnimationDefinition getAbilityAnim() {
         return squamorphAnimation.mouth_shoot;
     }
 

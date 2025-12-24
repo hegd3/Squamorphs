@@ -10,6 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ModelLayers {
     public static final ModelLayerLocation SQUAMORPH_LAYER = main("squamorph");
     public static final ModelLayerLocation PROJECTILE_LAYER = main("projectile");
+    public static final ModelLayerLocation FLY_LAYER = main("fly");
 
     private static ModelLayerLocation main(String id) {
         return new ModelLayerLocation(new ResourceLocation(Squamorphs.MODID, id), "main");

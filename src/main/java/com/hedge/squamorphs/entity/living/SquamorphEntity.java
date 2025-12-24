@@ -28,10 +28,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
-import net.minecraft.world.entity.ai.goal.BreedGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
@@ -40,6 +37,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
@@ -54,7 +52,7 @@ import java.util.ArrayList;
 import static com.hedge.squamorphs.entity.squamorphparts.AllParts.*;
 import static com.hedge.squamorphs.entity.squamorphparts.SquamorphElement.ALL_ELEMENTS;
 
-public class SquamorphEntity extends Animal implements RangedAttackMob {
+public class SquamorphEntity extends Animal {
 
     private static final EntityDataAccessor<Integer> HEAD_TYPE = SynchedEntityData.defineId(SquamorphEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> BODY_TYPE = SynchedEntityData.defineId(SquamorphEntity.class, EntityDataSerializers.INT);
@@ -121,7 +119,7 @@ public class SquamorphEntity extends Animal implements RangedAttackMob {
 
     public static AttributeSupplier.Builder bakeAttributes(){
         return Animal.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 10.0D)
+                .add(Attributes.MAX_HEALTH, 20.0D)
                 .add(Attributes.ATTACK_DAMAGE, 2.0D)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.5D)
                 .add(Attributes.FOLLOW_RANGE, 40F)
@@ -219,22 +217,17 @@ public class SquamorphEntity extends Animal implements RangedAttackMob {
 
     }
 
-    @Override
-    public void performRangedAttack(LivingEntity pTarget, float pVelocity) {
-        this.head.performRangedAttack(this, pTarget);
-        this.headAbilityCD = this.head.getCooldown();
-        this.setAttackState(0);
-    }
-
-
     private void tickCooldown() {
         mouthAbilityCD = Math.max(mouthAbilityCD - 1, 0);
         headAbilityCD = Math.max(headAbilityCD - 1, 0);
     }
 
     private void addCooldowns() {
-        mouthAbilityCD+=10;
-        headAbilityCD+=10;
+        mouthAbilityCD+=5;
+        headAbilityCD+=5;
+        bodyAbilityCD+=5;
+        tailAbilityCD+=5;
+        legAbilityCD+=5;
     }
 
 
@@ -304,11 +297,7 @@ public class SquamorphEntity extends Animal implements RangedAttackMob {
     @Override
     public @Nullable AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob ageableMob) {
         SquamorphEntity offspring = ModEntities.SQUAMORPH.get().create(pLevel);
-        if (ageableMob instanceof SquamorphEntity e) {
-            offspring.getTraitsFromParents(this, e, this.getRandom());
-        } else {
-            SquamorphHelpers.randomizeParts(offspring, this.getRandom());
-        }
+        offspring.copyTraits(this);
         return offspring;
     }
 
@@ -404,6 +393,10 @@ public class SquamorphEntity extends Animal implements RangedAttackMob {
         }
 
 
+    }
+
+    public boolean isFood(ItemStack pStack) {
+        return FOOD_ITEMS.test(pStack);
     }
 
     // passive overrides
@@ -664,13 +657,14 @@ public class SquamorphEntity extends Animal implements RangedAttackMob {
     // TO DO: BABIES INHERIT TRAITS INSTEAD
     @Override
     public void finalizeSpawnChildFromBreeding(ServerLevel pLevel, Animal pAnimal, @javax.annotation.Nullable AgeableMob pBaby) {
-        if (pBaby instanceof SquamorphEntity baby && pAnimal instanceof SquamorphEntity parent) {
+        super.finalizeSpawnChildFromBreeding(pLevel, pAnimal, pBaby);
+        if (!this.level().isClientSide() && pBaby instanceof SquamorphEntity baby && pAnimal instanceof SquamorphEntity parent) {
             baby.getTraitsFromParents(this, parent, this.getRandom());
-            super.finalizeSpawnChildFromBreeding(pLevel, pAnimal, pBaby);
         }
     }
 
     public void getTraitsFromParents(SquamorphEntity parent1, SquamorphEntity parent2, RandomSource random) {
+
         this.setHeadType(random.nextInt(2) == 0 ? parent1.getHeadType() : parent2.getHeadType());
         this.setMouthType(random.nextInt(2) == 0 ? parent1.getMouthType() : parent2.getMouthType());
         this.setBodyType(random.nextInt(2) == 0 ? parent1.getBodyType() : parent2.getBodyType());
@@ -681,6 +675,22 @@ public class SquamorphEntity extends Animal implements RangedAttackMob {
         this.setEyeColor(random.nextInt(2) == 0 ? parent1.getEyeColor() : parent2.getEyeColor());
         this.setPrimaryElementIndex(random.nextInt(2) == 0 ? parent1.getPrimaryElementIndex() : parent2.getPrimaryElementIndex());
         this.setSecondaryElementIndex(random.nextInt(2) == 0 ? parent1.getSecondaryElementIndex() : parent2.getSecondaryElementIndex());
+
+    }
+
+
+    public void copyTraits(SquamorphEntity entity) {
+
+        this.setHeadType(entity.getHeadType());
+        this.setMouthType(entity.getMouthType());
+        this.setBodyType(entity.getBodyType());
+        this.setLegType(entity.getLegType());
+        this.setTailType(entity.getTailType());
+        this.setPrimaryColor(entity.getPrimaryColor());
+        this.setSecondaryColor(entity.getSecondaryColor());
+        this.setEyeColor(entity.getEyeColor());
+        this.setPrimaryElementIndex(entity.getPrimaryElementIndex());
+        this.setSecondaryElementIndex(entity.getSecondaryElementIndex());
 
     }
 
