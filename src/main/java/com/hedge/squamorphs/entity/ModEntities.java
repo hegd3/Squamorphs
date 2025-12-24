@@ -2,6 +2,7 @@ package com.hedge.squamorphs.entity;
 
 import com.hedge.squamorphs.Squamorphs;
 import com.hedge.squamorphs.entity.living.SquamorphEntity;
+import com.hedge.squamorphs.entity.living.summons.ElementalFlyEntity;
 import com.hedge.squamorphs.entity.projectile.BoltProjectile;
 import com.hedge.squamorphs.entity.projectile.SonarProjectile;
 import net.minecraft.world.entity.EntityType;
@@ -18,6 +19,10 @@ public class ModEntities {
     public static final RegistryObject<EntityType<SquamorphEntity>> SQUAMORPH =
             ENTITY_TYPES.register("squamorph", () -> EntityType.Builder.of(SquamorphEntity::new, MobCategory.CREATURE)
                             .sized(0.9f, 0.6f).build("squamorph"));
+
+    public static final RegistryObject<EntityType<ElementalFlyEntity>> ELEMENTAL_FLY =
+            ENTITY_TYPES.register("elemental_fly", () -> EntityType.Builder.of(ElementalFlyEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 0.4f).build("sonar"));
 
     public static final RegistryObject<EntityType<BoltProjectile>> BOLT =
             ENTITY_TYPES.register("bolt", () -> EntityType.Builder.of(BoltProjectile::new, MobCategory.MISC)

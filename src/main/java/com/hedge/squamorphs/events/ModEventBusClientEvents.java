@@ -2,6 +2,7 @@ package com.hedge.squamorphs.events;
 
 import com.hedge.squamorphs.Squamorphs;
 import com.hedge.squamorphs.client.modellayers.ModelLayers;
+import com.hedge.squamorphs.client.models.ElementalFlyModel;
 import com.hedge.squamorphs.client.models.SquamorphProjectileModel;
 import com.hedge.squamorphs.client.models.SquamorphModel;
 import net.minecraftforge.api.distmarker.Dist;
@@ -18,6 +19,6 @@ public class ModEventBusClientEvents {
     public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModelLayers.SQUAMORPH_LAYER, SquamorphModel::createBodyLayer);
         event.registerLayerDefinition(ModelLayers.PROJECTILE_LAYER, SquamorphProjectileModel::createBodyLayer);
-
+        event.registerLayerDefinition(ModelLayers.FLY_LAYER, ElementalFlyModel::createBodyLayer);
     }
 }

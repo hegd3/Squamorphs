@@ -3,6 +3,7 @@ package com.hedge.squamorphs.entity.squamorphparts;
 import com.hedge.squamorphs.client.animations.squamorphAnimation;
 import com.hedge.squamorphs.entity.ModEntities;
 import com.hedge.squamorphs.entity.living.SquamorphEntity;
+import com.hedge.squamorphs.entity.living.summons.ElementalFlyEntity;
 import com.hedge.squamorphs.entity.projectile.BoltProjectile;
 import com.hedge.squamorphs.entity.projectile.SonarProjectile;
 import com.hedge.squamorphs.entity.projectile.SquamorphProjectile;
@@ -16,6 +17,7 @@ import com.hedge.squamorphs.entity.squamorphparts.legs.SquamorphLegless;
 import com.hedge.squamorphs.entity.squamorphparts.mouth.SquamorphMouth;
 import com.hedge.squamorphs.entity.squamorphparts.tail.SquamorphTail;
 import net.minecraft.client.animation.AnimationDefinition;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
 public class AllParts {
@@ -96,7 +98,16 @@ public class AllParts {
     public static final SquamorphHead HEAD13 = new SquamorphHead(13, 30, "one eye", true) {
 
     };
-    public static final SquamorphHead HEAD14 = new SquamorphHead(14, 30, "compound eyes", true) {
+    public static final SquamorphHead HEAD14 = new SquamorphHead(14, 200, "compound eyes", true) {
+
+        @Override
+        public void performRangedAttack(SquamorphEntity owner, LivingEntity pTarget) {
+            ElementalFlyEntity fly = ModEntities.ELEMENTAL_FLY.get().create(owner.level());
+            if (fly != null) {
+                fly.summon(owner, owner.getPrimaryElementIndex(), 1);
+                owner.level().addFreshEntity(fly);
+            }
+        }
 
     };
     public static final SquamorphHead HEAD15 = new SquamorphHead(15, 30, "four eyes", true) {

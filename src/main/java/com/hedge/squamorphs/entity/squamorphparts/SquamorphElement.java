@@ -18,7 +18,7 @@ public class SquamorphElement {
 
     public static final SquamorphElement FIRE = new SquamorphElement("fire") {
         @Override
-        public void applyElement(Entity affected, SquamorphEntity owner, int level, int chance) {
+        public void applyElement(Entity affected, LivingEntity owner, int level, int chance) {
             affected.setSecondsOnFire(5 + level * 2);
         }
 
@@ -31,14 +31,14 @@ public class SquamorphElement {
 
     public static final SquamorphElement ICE = new SquamorphElement("ice") {
         @Override
-        public void applyElement(Entity affected, SquamorphEntity owner, int level, int chance) {
+        public void applyElement(Entity affected, LivingEntity owner, int level, int chance) {
                 affected.setTicksFrozen(100 + level * 40);
         }
     };
 
     public static final SquamorphElement CAUSTIC = new SquamorphElement("caustic") {
         @Override
-        public void applyElement(Entity affected, SquamorphEntity owner, int level, int chance) {
+        public void applyElement(Entity affected, LivingEntity owner, int level, int chance) {
             if (owner.getRandom().nextInt(11) <= chance && affected instanceof LivingEntity e)
                 e.addEffect(new MobEffectInstance(MobEffects.POISON, 100 + level * 20, level)); // temporary: replace poison w/ custom effect
         }
@@ -51,7 +51,7 @@ public class SquamorphElement {
 
     public static final SquamorphElement ENDER = new SquamorphElement("ender") {
         @Override
-        public void applyElement(Entity affected, SquamorphEntity owner, int level, int chance) {
+        public void applyElement(Entity affected, LivingEntity owner, int level, int chance) {
             if (owner.getRandom().nextInt(11) <= chance && affected instanceof LivingEntity e)
                 e.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 40 + level * 20, level));
         }
@@ -80,7 +80,7 @@ public class SquamorphElement {
 
     public static final SquamorphElement RADIANT = new SquamorphElement("radiant") {
         @Override
-        public void applyElement(Entity affected, SquamorphEntity owner, int level, int chance) {
+        public void applyElement(Entity affected, LivingEntity owner, int level, int chance) {
             if (affected instanceof LivingEntity e && e.getMobType() == MobType.UNDEAD) {
                 e.hurt(owner.damageSources().magic(), level * 2 + 3);
             }
@@ -101,7 +101,7 @@ public class SquamorphElement {
 
     public static final SquamorphElement FORCE = new SquamorphElement("force") {
         @Override
-        public void applyElement(Entity affected, SquamorphEntity owner, int level, int chance) {
+        public void applyElement(Entity affected, LivingEntity owner, int level, int chance) {
             if (affected instanceof LivingEntity e) {
                 e.knockback(level * 0.1, owner.getX() - affected.getX(), owner.getZ() - affected.getZ());
             }
@@ -128,11 +128,11 @@ public class SquamorphElement {
         return this.name;
     }
 
-    public void applyElement(Entity affected, SquamorphEntity owner, int level, int chance) {
+    public void applyElement(Entity affected, LivingEntity owner, int level, int chance) {
 
     }
 
-    public void applyPassive(SquamorphEntity entity) {
+    public void applyPassive(LivingEntity entity) {
 
     }
 

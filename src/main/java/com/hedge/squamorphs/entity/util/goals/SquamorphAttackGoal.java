@@ -103,7 +103,7 @@ public class SquamorphAttackGoal extends Goal {
                 this.strafingBackwards = true;
             }
 
-            this.entity.getMoveControl().strafe(this.strafingBackwards ? -2F : 2F, this.strafingClockwise ? 2F : -2F);
+            this.entity.getMoveControl().strafe(this.strafingBackwards ? -1F : 1F, this.strafingClockwise ? 1F : -1F);
             Entity entity = this.entity.getControlledVehicle();
             if (entity instanceof Mob) {
                 Mob mob = (Mob)entity;

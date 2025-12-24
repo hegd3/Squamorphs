@@ -30,14 +30,14 @@ public class SonarProjectile extends SquamorphProjectile {
     }
 
 
-        @Override
+    @Override
     protected void onHitBlock(BlockHitResult blockHitResult) {
         bounces--;
         super.onHitBlock(blockHitResult);
         if (bounces < 0)
             discard();
         else {
-            this.setDeltaMovement(this.getDeltaMovement().scale(-1).offsetRandom(this.random, 0.5f));
+            this.setDeltaMovement(this.getDeltaMovement().scale(-1.05).offsetRandom(this.random, 0.5f));
             this.setYRot(this.getYRot() + 180.0F);
             this.yRotO += 180.0F;
         }
@@ -45,7 +45,7 @@ public class SonarProjectile extends SquamorphProjectile {
 
     @Override
     public float getSpeed() {
-        return 2.5f;
+        return 2.2f;
     }
 
 
