@@ -7,21 +7,27 @@ import net.minecraft.util.RandomSource;
 
 public class SquamorphHelpers {
 
-    private static final int[] NATURAL_PRIMARY_COLORS = new int[]{0x009900, 0x999966,
-            0x006600, 0x33cc33, 0x99ff33, 0x003300, 0xCF5940, 0x533A61, 0x4C3EC7, 0x59A4D9, 0xC95959, 0x211212, 0xB01212,
-            0xB53619, 0x995C56, 0x6A7363, 0x9E859E, 0xE06D22};
-    private static final int[] NATURAL_SECONDARY_COLORS = new int[]{0x795E8A, 0x7E8A9E,
-            0x8BC4A2, 0xBBD1A7, 0x85826F, 0x33312F, 0xC2B2A9, 0x9085ED, 0x8BC1E8, 0xA5D4B8, 0xEBC773, 0xD14B7B, 0x787D74};
+
     private static final int[] NATURAL_EYE_COLORS = new int[]{0x000000, 0x34394A, 0x38193B,
             0xD9C923, 0x705580, 0xB8B2B0, 0x697A8C, 0xED2D2D, 0xDB799E, 0xF2330A};
 
+    private static final int[] FIRE_COLORS = new int[]{0xFF6B24, 0xFA4C00, 0xBA5441, 0xE87481, 0xC74444, 0x874A4A};
+    private static final int[] ICE_COLORS = new int[]{0x9FB5BF, 0x86C6E3, 0x74ADE3, 0x6C86D4, 0x448FC2};
+    private static final int[] CAUSTIC_COLORS = new int[]{0x76A67B, 0x7EBF85, 0x77E067, 0xA2BD9D, 0x90C940, 0x26C73C};
+    private static final int[] ENDER_COLORS = new int[]{0xA363A8, 0x8C3296, 0x5E2D66, 0x8C1DA1, 0x572A44};
+    private static final int[] SOUL_COLORS = new int[]{0xA5D9CF, 0xA5D9B9, 0x89F0D4, 0x58A698, 0x735D57};
+    private static final int[] UMBRA_COLORS = new int[]{0x4F3F3F, 0x362F36, 0x47353A, 0x4C150D};
+    private static final int[] RADIANT_COLORS = new int[]{0xBFBB99, 0xD1CA7D, 0xDEB42A, 0xCAD15C};
+    private static final int[] METAL_COLORS = new int[]{0x75787D, 0x778F81, 0x998E94};
+    private static final int[] FORCE_COLORS = new int[]{0xF23F3F, 0xBA4151, 0xE3344B};
 
-    public static int generateBodyColor(RandomSource random) {
-        return NATURAL_PRIMARY_COLORS[random.nextInt(NATURAL_PRIMARY_COLORS.length) % NATURAL_PRIMARY_COLORS.length];
-    }
+    private static final int[][] ALL_COLORS = new int[][]{
+            FIRE_COLORS, ICE_COLORS, CAUSTIC_COLORS, ENDER_COLORS, SOUL_COLORS, UMBRA_COLORS, RADIANT_COLORS, METAL_COLORS,
+            FORCE_COLORS
+    };
 
-    public static int generateSecondaryColor(RandomSource random) {
-        return NATURAL_SECONDARY_COLORS[random.nextInt(NATURAL_SECONDARY_COLORS.length) % NATURAL_SECONDARY_COLORS.length];
+    public static int generateBodyColor(int index, RandomSource random) {
+        return ALL_COLORS[index][random.nextInt(ALL_COLORS[index].length) % ALL_COLORS[index].length];
     }
 
     public static int generateEyeColor(RandomSource random) {
@@ -39,8 +45,9 @@ public class SquamorphHelpers {
         entity.setSecondaryElementIndex(random.nextInt(SquamorphElement.ALL_ELEMENTS.length));
 
 
-        entity.setPrimaryColor(SquamorphHelpers.generateBodyColor(random));
-        entity.setSecondaryColor(SquamorphHelpers.generateSecondaryColor(random));
+        entity.setPrimaryColor(SquamorphHelpers.generateBodyColor(entity.getPrimaryElementIndex(), random));
+        entity.setSecondaryColor(SquamorphHelpers.generateBodyColor(entity.getSecondaryElementIndex(), random));
+
         entity.setEyeColor(SquamorphHelpers.generateEyeColor(random));
     }
 

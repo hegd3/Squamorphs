@@ -11,15 +11,17 @@ import com.hedge.squamorphs.entity.projectile.SquamorphProjectile;
 import com.hedge.squamorphs.entity.squamorphparts.body.SquamorphBody;
 import com.hedge.squamorphs.entity.squamorphparts.body.SquamorphWings;
 import com.hedge.squamorphs.entity.squamorphparts.head.SquamorphHead;
-import com.hedge.squamorphs.entity.squamorphparts.legs.SquamorphBipedLeg;
-import com.hedge.squamorphs.entity.squamorphparts.legs.SquamorphCubicLeg;
-import com.hedge.squamorphs.entity.squamorphparts.legs.SquamorphLeg;
-import com.hedge.squamorphs.entity.squamorphparts.legs.SquamorphLegless;
+import com.hedge.squamorphs.entity.squamorphparts.legs.*;
 import com.hedge.squamorphs.entity.squamorphparts.mouth.SquamorphMouth;
+import com.hedge.squamorphs.entity.squamorphparts.tail.SquamorphSwingingTail;
 import com.hedge.squamorphs.entity.squamorphparts.tail.SquamorphTail;
+import com.hedge.squamorphs.entity.util.EntityHelpers;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+
+import java.util.List;
 
 public class AllParts {
 
@@ -29,11 +31,11 @@ public class AllParts {
 
 
 
-    public static final SquamorphHead HEAD0 = new SquamorphHead(0, 30, "basic head", false);
-    public static final SquamorphHead HEAD1 = new SquamorphHead(1, 30, "croc eyes", true) {
+    public static final SquamorphHead HEAD0 = new SquamorphHead(0, 60, "basic head", false);
+    public static final SquamorphHead HEAD1 = new SquamorphHead(1, 60, "croc eyes", true) {
 
     };
-    public static final SquamorphHead HEAD2 = new SquamorphHead(2, 30, "spiky horns", false) {
+    public static final SquamorphHead HEAD2 = new SquamorphHead(2, 60, "spiky horns", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getSecondaryColor();
@@ -62,49 +64,49 @@ public class AllParts {
             return projectile;
         }
     };
-    public static final SquamorphHead HEAD5 = new SquamorphHead(5, 30, "head spike", false) {
+    public static final SquamorphHead HEAD5 = new SquamorphHead(5, 60, "head spike", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getSecondaryColor();
         }
     };
-    public static final SquamorphHead HEAD6 = new SquamorphHead(6, 30, "hairy head", false) {
+    public static final SquamorphHead HEAD6 = new SquamorphHead(6, 60, "hairy head", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getSecondaryColor();
         }
     };
-    public static final SquamorphHead HEAD7 = new SquamorphHead(7, 30, "head frills", false) {
+    public static final SquamorphHead HEAD7 = new SquamorphHead(7, 60, "head frills", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getSecondaryColor();
         }
     };
-    public static final SquamorphHead HEAD8 = new SquamorphHead(8, 30, "arachnid eyes", false) {
+    public static final SquamorphHead HEAD8 = new SquamorphHead(8, 60, "arachnid eyes", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getEyeColor();
         }
     };
-    public static final SquamorphHead HEAD9 = new SquamorphHead(9, 30, "tall eyes", true) {
+    public static final SquamorphHead HEAD9 = new SquamorphHead(9, 60, "tall eyes", true) {
 
     };
-    public static final SquamorphHead HEAD10 = new SquamorphHead(10, 30, "chameleon eyes", true) {
+    public static final SquamorphHead HEAD10 = new SquamorphHead(10, 60, "chameleon eyes", true) {
 
     };
-    public static final SquamorphHead HEAD11 = new SquamorphHead(11, 30, "whirl stalk", false) {
+    public static final SquamorphHead HEAD11 = new SquamorphHead(11, 60, "whirl stalk", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getSecondaryColor();
         }
     };
-    public static final SquamorphHead HEAD12 = new SquamorphHead(12, 30, "feathered crest", false) {
+    public static final SquamorphHead HEAD12 = new SquamorphHead(12, 60, "feathered crest", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getSecondaryColor();
         }
     };
-    public static final SquamorphHead HEAD13 = new SquamorphHead(13, 30, "one eye", true) {
+    public static final SquamorphHead HEAD13 = new SquamorphHead(13, 60, "one eye", true) {
 
     };
     public static final SquamorphHead HEAD14 = new SquamorphHead(14, 200, "compound eyes", true) {
@@ -119,22 +121,22 @@ public class AllParts {
         }
 
     };
-    public static final SquamorphHead HEAD15 = new SquamorphHead(15, 30, "four eyes", true) {
+    public static final SquamorphHead HEAD15 = new SquamorphHead(15, 60, "four eyes", true) {
 
     };
-    public static final SquamorphHead HEAD16 = new SquamorphHead(16, 30, "nocturnal eyes", false) {
+    public static final SquamorphHead HEAD16 = new SquamorphHead(16, 60, "nocturnal eyes", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getEyeColor();
         }
     };
-    public static final SquamorphHead HEAD17 = new SquamorphHead(17, 30, "six eyes", true) {
+    public static final SquamorphHead HEAD17 = new SquamorphHead(17, 60, "six eyes", true) {
 
     };
-    public static final SquamorphHead HEAD18 = new SquamorphHead(18, 30, "frog eyes", true) {
+    public static final SquamorphHead HEAD18 = new SquamorphHead(18, 60, "frog eyes", true) {
 
     };
-    public static final SquamorphHead HEAD19 = new SquamorphHead(19, 30, "drab antennae", false) {
+    public static final SquamorphHead HEAD19 = new SquamorphHead(19, 60, "drab antennae", false) {
 
     };
 
@@ -159,7 +161,45 @@ public class AllParts {
 
     public static final SquamorphMouth MOUTH6 = new SquamorphMouth(6,20, "tusked snout", true, true);
 
-    public static final SquamorphMouth MOUTH7 = new SquamorphMouth(7,20, "sawtooth", false, true);
+    public static final SquamorphMouth MOUTH7 = new SquamorphMouth(7,80, "sawtooth", false, true) {
+        @Override
+        public boolean canUseAbility(SquamorphEntity owner, LivingEntity target) {
+            return owner.getMouthAbilityCD() <= 0 && owner.getPerceivedTargetDistanceSquareForMeleeAttack(target) <= owner.getBbWidth() * 4.0F * owner.getBbWidth() * 4.0F + target.getBbWidth();
+        }
+
+        @Override
+        public AnimationDefinition getAbilityAnim(SquamorphEntity owner) {
+            return squamorphAnimation.sawing;
+        }
+
+        @Override
+        public void tickAttack(SquamorphEntity entity, int animTicks, LivingEntity target, double dist) {
+
+            if (animTicks >= 100) {
+                entity.addCooldowns();
+                entity.setMouthCD(this.getCooldown());
+                entity.setAttackState(0);
+            } else if (animTicks % 5 == 0) {
+                this.performMeleeAttack(entity, target, dist);
+            }
+        }
+
+        @Override
+        public void performMeleeAttack(SquamorphEntity owner, LivingEntity target, double dist) {
+            List<LivingEntity> hit = owner.aoeAttack(0.75, 1.2, 1, 0.75, this.getDamage(owner), 0);
+            for (LivingEntity entity: hit) {
+                owner.getPrimaryElement().applyElement(entity, owner, 1, 1);
+                EntityHelpers.particleOnhitEffect(owner.getPrimaryElement().getParticle(), entity, owner.level(), 1);
+
+            }
+        }
+
+        @Override
+        public float getDamage(SquamorphEntity owner) {
+            return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 0.25f;
+        }
+    };
+
 
     public static final SquamorphMouth MOUTH8 = new SquamorphMouth(8,20, "arachnid fangs", false, false);
 
@@ -183,7 +223,24 @@ public class AllParts {
 
     public static final SquamorphMouth MOUTH18 = new SquamorphMouth(18,20, "saber teeth", false, false);
 
-    public static final SquamorphMouth MOUTH19 = new SquamorphMouth(19,20, "mandibles", false, false);
+    public static final SquamorphMouth MOUTH19 = new SquamorphMouth(19,40, "mandibles", false, false) {
+        @Override
+        public void tickAttack(SquamorphEntity entity, int animTicks, LivingEntity target, double dist) {
+            if (animTicks == 12) {
+                this.performMeleeAttack(entity, target, dist);
+            } else if (animTicks >= 15) {
+                entity.addCooldowns();
+                entity.setMouthCD(this.getCooldown());
+                entity.setAttackState(0);
+            }
+        }
+
+        @Override
+        public AnimationDefinition getAbilityAnim(SquamorphEntity owner) {
+            return squamorphAnimation.bite_mandibles;
+        }
+
+    };
 
 
 
@@ -225,7 +282,51 @@ public class AllParts {
     };
     public static final SquamorphBody BODY17 = new SquamorphBody(17, 0, "sail");
     public static final SquamorphBody BODY18 = new SquamorphBody(18, 0, "tall hairs");
-    public static final SquamorphBody BODY19 = new SquamorphBody(19, 0, "back cannon");
+    public static final SquamorphBody BODY19 = new SquamorphBody(19, 10, "back cannon") {
+
+        @Override
+        public boolean hasRanged() {
+            return true;
+        }
+
+        @Override
+        public AnimationDefinition getAbilityAnim(SquamorphEntity owner) {return squamorphAnimation.cannon_shoot;}
+
+
+        @Override
+        public void performRangedAttack(SquamorphEntity owner, LivingEntity pTarget) {
+            BoltProjectile projectile = ModEntities.BOLT.get().create(owner.level());
+            if (projectile != null) {
+                projectile.setOwner(owner);
+                projectile.setElementIndex(owner.getSecondaryElementIndex());
+                projectile.moveTo(owner.getX(), owner.getY() + 0.2, owner.getZ());
+                double d0 = pTarget.getX() - owner.getX();
+                double d1 = pTarget.getY() - projectile.getY();
+
+                double d2 = pTarget.getZ() - owner.getZ();
+                double d3 = Math.sqrt(d0 * d0 + d2 * d2);
+                projectile.shoot(d0, d1 + d3 * 0.1, d2, 1F, 0);
+                owner.level().addFreshEntity(projectile);
+            }
+        }
+
+        @Override
+        public boolean canUseAbility(SquamorphEntity owner, LivingEntity target) {
+            double d0 = owner.getPerceivedTargetDistanceSquareForMeleeAttack(target);
+            return owner.getBodyAbilityCD() <= 0 && d0 < owner.getHead().getRange();
+        }
+
+        @Override
+        public void tickAttack(SquamorphEntity entity, int animTicks, LivingEntity target, double dist) {
+            if (animTicks == 3) {
+                this.performRangedAttack(entity, target);
+            } else if (animTicks >= 7) {
+                entity.addCooldowns();
+                entity.setBodyCD(this.getCooldown());
+                entity.setAttackState(0);
+            }
+        }
+    };
     public static final SquamorphBody BODY20 = new SquamorphBody(20, 0, "shiny shell");
 
     public static final SquamorphBody[] ALL_BODIES = {BODY0, BODY1, BODY2, BODY3, BODY4, BODY5, BODY6, BODY7, BODY8, BODY9, BODY10,
@@ -291,7 +392,7 @@ public class AllParts {
 
     };
 
-    public static final SquamorphLeg LEG15 = new SquamorphBipedLeg(15, 0, "tyrant claws") {
+    public static final SquamorphLeg LEG15 = new SquamorphBipedClawedLeg(15, 15, "tyrant claws") {
 
     };
 
@@ -303,11 +404,11 @@ public class AllParts {
 
     };
 
-    public static final SquamorphLeg LEG18 = new SquamorphBipedLeg(18, 0, "slasher claws") {
+    public static final SquamorphLeg LEG18 = new SquamorphBipedClawedLeg(18, 15, "slasher claws") {
 
     };
 
-    public static final SquamorphLeg LEG19 = new SquamorphBipedLeg(19, 0, "hooked claws") {
+    public static final SquamorphLeg LEG19 = new SquamorphBipedClawedLeg(19, 15, "hooked claws") {
 
     };
 
@@ -332,7 +433,7 @@ public class AllParts {
 
     };
 
-    public static final SquamorphTail TAIL3 = new SquamorphTail(3, 80, "tail club") {
+    public static final SquamorphTail TAIL3 = new SquamorphSwingingTail(3, 100, "tail club") {
 
     };
 
@@ -381,7 +482,7 @@ public class AllParts {
 
     };
 
-    public static final SquamorphTail TAIL15 = new SquamorphTail(15, 0, "plated tail") {
+    public static final SquamorphTail TAIL15 = new SquamorphSwingingTail(15, 100, "plated tail") {
 
     };
 
@@ -397,11 +498,11 @@ public class AllParts {
 
     };
 
-    public static final SquamorphTail TAIL19 = new SquamorphTail(19, 0, "whip-tail") {
+    public static final SquamorphTail TAIL19 = new SquamorphSwingingTail(19, 100, "whip-tail") {
 
     };
 
-    public static final SquamorphTail TAIL20 = new SquamorphTail(20, 0, "hand tail") {
+    public static final SquamorphTail TAIL20 = new SquamorphTail(20, 400, "hand tail") {
 
     };
 

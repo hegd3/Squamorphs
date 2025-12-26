@@ -21,11 +21,6 @@ public class SquamorphCubicLeg extends SquamorphLeg {
     }
 
     @Override
-    public String getName() {
-        return "cubic leg";
-    }
-
-    @Override
     public float getHeight() {
         return 19.9f;
     }

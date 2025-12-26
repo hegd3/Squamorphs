@@ -10,6 +10,7 @@ import com.hedge.squamorphs.entity.squamorphparts.head.SquamorphHead;
 import com.hedge.squamorphs.entity.squamorphparts.legs.SquamorphLeg;
 import com.hedge.squamorphs.entity.squamorphparts.mouth.SquamorphMouth;
 import com.hedge.squamorphs.entity.squamorphparts.tail.SquamorphTail;
+import com.hedge.squamorphs.entity.util.EntityHelpers;
 import com.hedge.squamorphs.entity.util.SquamorphHelpers;
 import com.hedge.squamorphs.entity.util.goals.SquamorphAttackGoal;
 import com.hedge.squamorphs.entity.util.goals.SquamorphWanderGoal;
@@ -37,17 +38,21 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import static com.hedge.squamorphs.entity.squamorphparts.AllParts.*;
 import static com.hedge.squamorphs.entity.squamorphparts.SquamorphElement.ALL_ELEMENTS;
@@ -79,6 +84,7 @@ public class SquamorphEntity extends Animal {
     private static final EntityDataAccessor<Integer> BODY_LEVEL = SynchedEntityData.defineId(SquamorphEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> LEGS_LEVEL = SynchedEntityData.defineId(SquamorphEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> TAIL_LEVEL = SynchedEntityData.defineId(SquamorphEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> LEFT = SynchedEntityData.defineId(SquamorphEntity.class, EntityDataSerializers.BOOLEAN);
 
 
     public final AnimationState idleAnimationState = new AnimationState();
@@ -166,20 +172,11 @@ public class SquamorphEntity extends Animal {
         }
     }
 
-    public void startAttackAnim(double dist, LivingEntity target, int animIndex) {
+    public void startAttackAnim(int animIndex) {
 
         animTicks = 0;
 
-        switch (animIndex) {
-            case 1:
-                if (dist <= this.getMeleeAttackRangeSqr(target)) {
-                    this.setAttackState(1);
-                }
-                break;
-            case 2:
-                this.setAttackState(2);
-                break;
-        }
+        this.setAttackState(animIndex);
     }
 
     private void tickAttack(LivingEntity target) {
@@ -190,12 +187,20 @@ public class SquamorphEntity extends Animal {
                 double d0 = this.getPerceivedTargetDistanceSquareForMeleeAttack(target);
                 switch (this.getAttackState()) {
                     case 1:
-                        if (animTicks >= 8) {
-                            this.checkAndPerformAttack(target, d0);
-                        }
+                        this.mouth.tickAttack(this, animTicks, target, d0);
                         break;
                     case 2:
                         this.head.tickAttack(this, animTicks, target, d0);
+                        break;
+                    case 3:
+                        this.body.tickAttack(this, animTicks, target, d0);
+                        break;
+                    case 4:
+                        this.leg.tickAttack(this, animTicks, target, d0);
+                        break;
+                    case 5:
+                        this.tail.tickAttack(this, animTicks, target, d0);
+                        break;
                 }
             }
             else {
@@ -206,33 +211,22 @@ public class SquamorphEntity extends Animal {
 
     }
 
-    public void checkAndPerformAttack(LivingEntity target, double dist) {
-        double d0 = this.getMeleeAttackRangeSqr(target);
-        if (dist <= d0) {
-            this.swing(InteractionHand.MAIN_HAND);
-            this.doHurtTarget(target);
-            this.primaryElement.applyElement(target, this, 1, 5);
-            this.animTicks = 0;
-        }
-        //this.addCooldowns();
-        this.mouthAbilityCD = 20;
-        this.setAttackState(0);
-
-    }
 
     private void tickCooldown() {
         mouthAbilityCD = Math.max(mouthAbilityCD - 1, 0);
         headAbilityCD = Math.max(headAbilityCD - 1, 0);
+        bodyAbilityCD = Math.max(bodyAbilityCD - 1, 0);
+        tailAbilityCD = Math.max(tailAbilityCD - 1, 0);
+        legAbilityCD = Math.max(legAbilityCD - 1, 0);
     }
 
-    private void addCooldowns() {
+    public void addCooldowns() {
         mouthAbilityCD+=5;
         headAbilityCD+=5;
         bodyAbilityCD+=5;
         tailAbilityCD+=5;
         legAbilityCD+=5;
     }
-
 
     @Override
     public void travel(Vec3 pTravelVector) {
@@ -264,6 +258,7 @@ public class SquamorphEntity extends Animal {
         this.entityData.define(EYE_COLOR, 0);
         this.entityData.define(IS_FLYING, false);
         this.entityData.define(ATTACK_STATE, 0);
+        this.entityData.define(LEFT, false);
     }
 
     @Override
@@ -453,8 +448,41 @@ public class SquamorphEntity extends Animal {
     }
 
     private void refreshMoves(SquamorphPart part) {
-        if (part.hasMelee()) this.melee_parts.add(part);
-        else if (part.hasRanged()) this.ranged_parts.add(part);
+        if (part.hasMelee()) {
+            this.melee_parts.add(part);
+            this.melee_parts.sort(Comparator.comparing(SquamorphPart::getCooldown));
+        } else if (part.hasRanged()) {
+            this.ranged_parts.add(part);
+            this.ranged_parts.sort(Comparator.comparing(SquamorphPart::getCooldown));
+
+        }
+
+    }
+
+    public List<LivingEntity> aoeAttack(double vecScale, double pX, double pY, double pZ, float damage, float kbMultiplier) {
+
+        Vec3 lookVec = this.getLookAngle();
+        Vec3 origin = this.position().add(lookVec.scale(vecScale));
+
+        AABB aoe = new AABB(origin.subtract(pX, pY, pZ), origin.add(pX, pY, pZ));
+
+        List<LivingEntity> hit = this.level().getEntitiesOfClass(LivingEntity.class, aoe, (target) ->
+                target.isAlive() && this.hasLineOfSight(target) && !this.isAlliedTo(target) && this != target);
+
+        for (LivingEntity target: hit) {
+
+                target.hurt(target.damageSources().mobAttack(this), damage);
+                target.knockback(0.8D + 0.5D * kbMultiplier, this.getX() - target.getX(), this.getZ() - target.getZ());
+
+
+        }
+        return hit;
+    }
+
+    public void betterDoHurt(LivingEntity target, float damage, float kbMultiplier) {
+        target.hurt(target.damageSources().mobAttack(this), damage);
+        target.knockback(0.8D + 0.5D * kbMultiplier, this.getX() - target.getX(), this.getZ() - target.getZ());
+
     }
 
     // synched data getters/setters
@@ -619,6 +647,14 @@ public class SquamorphEntity extends Animal {
 
     }
 
+    public void setAttackDirection(boolean b) {
+        this.entityData.set(LEFT, b);
+    }
+
+    public boolean isAttackingLeft() {
+        return this.entityData.get(LEFT);
+    }
+
     public int getHeadCD() {
         return this.headAbilityCD;
     }
@@ -660,6 +696,21 @@ public class SquamorphEntity extends Animal {
         this.tailAbilityCD = i;
     }
 
+    public void setAnimTicks(int i) {
+        this.animTicks = i;
+    }
+
+    public int getAnimTicks() {
+        return this.animTicks;
+    }
+
+    public ArrayList<SquamorphPart> getMeleeParts() {
+        return this.melee_parts;
+    }
+
+    public ArrayList<SquamorphPart> getRangedParts() {
+        return this.ranged_parts;
+    }
 
     // TO DO: BABIES INHERIT TRAITS INSTEAD
     @Override
@@ -677,11 +728,12 @@ public class SquamorphEntity extends Animal {
         this.setBodyType(random.nextInt(2) == 0 ? parent1.getBodyType() : parent2.getBodyType());
         this.setLegType(random.nextInt(2) == 0 ? parent1.getLegType() : parent2.getLegType());
         this.setTailType(random.nextInt(2) == 0 ? parent1.getTailType() : parent2.getTailType());
-        this.setPrimaryColor(random.nextInt(2) == 0 ? parent1.getPrimaryColor() : parent2.getPrimaryColor());
-        this.setSecondaryColor(random.nextInt(2) == 0 ? parent1.getSecondaryColor() : parent2.getSecondaryColor());
-        this.setEyeColor(random.nextInt(2) == 0 ? parent1.getEyeColor() : parent2.getEyeColor());
+        this.setEyeColor(parent1.getEyeColor() + parent2.getEyeColor());
         this.setPrimaryElementIndex(random.nextInt(2) == 0 ? parent1.getPrimaryElementIndex() : parent2.getPrimaryElementIndex());
         this.setSecondaryElementIndex(random.nextInt(2) == 0 ? parent1.getSecondaryElementIndex() : parent2.getSecondaryElementIndex());
+        this.setPrimaryColor(SquamorphHelpers.generateBodyColor(this.getPrimaryElementIndex(), random));
+        this.setSecondaryColor(SquamorphHelpers.generateBodyColor(this.getSecondaryElementIndex(), random));
+
 
     }
 
@@ -698,7 +750,7 @@ public class SquamorphEntity extends Animal {
         this.setEyeColor(entity.getEyeColor());
         this.setPrimaryElementIndex(entity.getPrimaryElementIndex());
         this.setSecondaryElementIndex(entity.getSecondaryElementIndex());
-
+        this.setPatternType(entity.getPatternType());
     }
 
 

@@ -22,9 +22,5 @@ public class ElementalFlyRenderer extends MobRenderer<ElementalFlyEntity, Elemen
         return new ResourceLocation(Squamorphs.MODID, "textures/entity/summons/fly/elemental_fly_" + entity.getElement().getElementName() + ".png");
     }
 
-    @Override
-    protected int getBlockLightLevel(ElementalFlyEntity entity, BlockPos pos) {
-        return 15;
-    }
 
 }

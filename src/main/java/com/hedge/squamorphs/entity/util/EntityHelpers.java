@@ -1,8 +1,12 @@
 package com.hedge.squamorphs.entity.util;
 
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -34,6 +38,14 @@ public class EntityHelpers {
 
     public static Vec3 getRandomVec3(double sc) {
         return new Vec3(getRandomScaled(sc), getRandomScaled(sc), getRandomScaled(sc));
+    }
+
+    public static void particleOnhitEffect(SimpleParticleType particle, Entity target, Level level, int count) {
+        ((ServerLevel)level).sendParticles(
+                particle,
+                target.getX(), target.getY(), target.getZ(),
+                count,
+                0.0, 0.0, 0.0, 0.0);
     }
 
 }

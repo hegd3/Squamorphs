@@ -20,11 +20,6 @@ public class SquamorphBipedLeg extends SquamorphLeg {
     }
 
     @Override
-    public String getName() {
-        return "biped leg";
-    }
-
-    @Override
     public float getHeight() {
         return 19.9f;
     }

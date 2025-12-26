@@ -4,9 +4,11 @@ import com.hedge.squamorphs.client.modellayers.AllTextures;
 import com.hedge.squamorphs.client.models.SquamorphModel;
 import com.hedge.squamorphs.client.renderer.SquamorphRenderer;
 import com.hedge.squamorphs.entity.living.SquamorphEntity;
+import com.hedge.squamorphs.entity.living.summons.ElementalFlyEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.core.BlockPos;
 
 public class SquamorphEyeLayer extends RenderLayer<SquamorphEntity, SquamorphModel> {
 
@@ -31,8 +33,9 @@ public class SquamorphEyeLayer extends RenderLayer<SquamorphEntity, SquamorphMod
             float b = (float) (color & 255) / 255.0F;
 
 
-            renderColoredCutoutModel(getParentModel(), entity.getHead().hasEyes() ? AllTextures.getEyeTex(index) : AllTextures.getEyeTex(0), poseStack, buffer, packedLightIn, entity, r, g, b);
+            renderColoredCutoutModel(getParentModel(), entity.getHead().hasEyes() ? AllTextures.getEyeTex(index) : AllTextures.getEyeTex(0), poseStack, buffer, 250, entity, r, g, b);
         }
 
     }
+
 }

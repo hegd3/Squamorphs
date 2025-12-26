@@ -12,6 +12,7 @@ import com.hedge.squamorphs.entity.squamorphparts.body.SquamorphWings;
 import com.hedge.squamorphs.entity.squamorphparts.head.SquamorphHead;
 import com.hedge.squamorphs.entity.squamorphparts.legs.SquamorphLeg;
 import com.hedge.squamorphs.entity.squamorphparts.mouth.SquamorphMouth;
+import com.hedge.squamorphs.entity.squamorphparts.tail.SquamorphTail;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
@@ -201,7 +202,7 @@ public class SquamorphModel extends HierarchicalModel<SquamorphEntity> {
         SquamorphHead headPart = entity.getHead();
         SquamorphBody bodyPart = entity.getBody();
 		SquamorphLeg legPart = entity.getLeg();
-
+		SquamorphTail tailPart = entity.getTail();
 
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		this.applyRot(entity, netHeadYaw, headPitch, ageInTicks);
@@ -217,10 +218,12 @@ public class SquamorphModel extends HierarchicalModel<SquamorphEntity> {
             this.animate(entity.idleAnimationState, entity.isFlying()? squamorphAnimation.fly : entity.isInFluidType() ? squamorphAnimation.swim_idle : legPart.getIdle(), ageInTicks, 1f);
 
             switch (entity.getAttackState()) {
-                case 2 -> this.animate(entity.currentMoveAnimationState, headPart.getAbilityAnim(), ageInTicks, 1f);
-                default -> this.animate(entity.currentMoveAnimationState, mouthPart.getAbilityAnim(), ageInTicks, 1f);
+                case 2 -> this.animate(entity.currentMoveAnimationState, headPart.getAbilityAnim(entity), ageInTicks, 1f);
+				case 3 -> this.animate(entity.currentMoveAnimationState, bodyPart.getAbilityAnim(entity), ageInTicks, 1f);
+				case 4 -> this.animate(entity.currentMoveAnimationState, legPart.getAbilityAnim(entity), ageInTicks, 1f);
+				case 5 -> this.animate(entity.currentMoveAnimationState, tailPart.getAbilityAnim(entity), ageInTicks, 1f);
+                default -> this.animate(entity.currentMoveAnimationState, mouthPart.getAbilityAnim(entity), ageInTicks, 1f);
             }
-            this.animate(entity.currentMoveAnimationState, mouthPart.getBiteAnim(), ageInTicks, 1f);
 
 
             if (bodyPart instanceof SquamorphWings w) {

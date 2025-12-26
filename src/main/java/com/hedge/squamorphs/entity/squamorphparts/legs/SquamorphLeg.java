@@ -22,6 +22,9 @@ public class SquamorphLeg extends SquamorphPart {
         return squamorphAnimation.basic_idle;
     }
 
+    public int getAbilityAnimState() {return 4;}
+
+
     public float getHeight() {
         return 23.0f;
     }

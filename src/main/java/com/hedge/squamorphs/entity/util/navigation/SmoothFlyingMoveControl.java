@@ -7,8 +7,6 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 
 public class SmoothFlyingMoveControl extends MoveControl {
 
-    private static final float FULL_SPEED_TURN_THRESHOLD = 10.0F;
-    private static final float STOP_TURN_THRESHOLD = 60.0F;
     private final int maxTurnX;
     private final int maxTurnY;
 

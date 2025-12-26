@@ -9,5 +9,7 @@ public class SquamorphBody extends SquamorphPart {
         super(index, cooldown, name);
     }
 
+    @Override
+    public int getAbilityAnimState() {return 3;}
 
 }

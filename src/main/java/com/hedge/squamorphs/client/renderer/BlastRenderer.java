@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -47,6 +48,7 @@ public class BlastRenderer extends EntityRenderer<BlastProjectile> {
         super.render(entity, yaw, partialTicks, poseStack, bufferSource, light);
 
     }
+
 
 
 
