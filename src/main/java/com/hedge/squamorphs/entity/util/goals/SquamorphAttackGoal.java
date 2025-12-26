@@ -1,6 +1,7 @@
 package com.hedge.squamorphs.entity.util.goals;
 
 import com.hedge.squamorphs.entity.living.SquamorphEntity;
+import com.hedge.squamorphs.entity.squamorphparts.SquamorphPart;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
@@ -51,8 +53,8 @@ public class SquamorphAttackGoal extends Goal {
         if (livingentity != null) {
             double d0 = this.entity.getPerceivedTargetDistanceSquareForMeleeAttack(livingentity);
             boolean inRange = entity.distanceToSqr(livingentity) < this.getRangedAttackReachSqr(livingentity) && Math.abs(entity.getY() - livingentity.getY()) < 3;
-            boolean outHeadRange = d0 > entity.getHead().getRange();
-            if (inRange || outHeadRange) {
+            boolean inHeadRange = d0 < entity.getHead().getRange();
+            if (inRange || !inHeadRange) {
                 this.pathToTarget(livingentity);
             } else {
                 this.strafingTick(d0, livingentity);
@@ -60,10 +62,9 @@ public class SquamorphAttackGoal extends Goal {
 
 
             if (entity.getAttackState() == 0) {
-                if (entity.getHeadCD() == 0 && !inRange) {
-                    entity.startAttackAnim(d0, livingentity, 2);
-                } else if (entity.getMouthAbilityCD() == 0 && !outHeadRange) {
-                    entity.startAttackAnim(d0, livingentity, 1);
+                SquamorphPart currentAbility = selectPart(livingentity);
+                if (currentAbility != null) {
+                    entity.startAttackAnim(d0, livingentity, currentAbility.getAbilityAnimState());
                 }
             }
         }
@@ -181,5 +182,18 @@ public class SquamorphAttackGoal extends Goal {
 
     private double getRangedAttackReachSqr(LivingEntity pAttackTarget) {
         return this.entity.getBbWidth() * 8.0F * this.entity.getBbWidth() * 8.0F + pAttackTarget.getBbWidth();
+    }
+
+    @Nullable
+    private SquamorphPart selectPart(LivingEntity target) {
+        for (SquamorphPart part: this.entity.getMeleeParts()) {
+            if (part.canUseAbility(this.entity, target))
+                return part;
+        }
+        for (SquamorphPart part: this.entity.getRangedParts()) {
+            if (part.canUseAbility(this.entity, target))
+                return part;
+        }
+        return null;
     }
 }

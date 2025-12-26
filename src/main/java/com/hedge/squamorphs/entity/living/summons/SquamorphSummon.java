@@ -3,6 +3,7 @@ package com.hedge.squamorphs.entity.living.summons;
 import com.hedge.squamorphs.entity.living.SquamorphEntity;
 import com.hedge.squamorphs.entity.squamorphparts.SquamorphElement;
 import com.hedge.squamorphs.entity.util.AttackStateEntity;
+import com.hedge.squamorphs.entity.util.EntityHelpers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -210,6 +211,12 @@ public abstract class SquamorphSummon extends PathfinderMob implements OwnableEn
     @Override
     public @Nullable LivingEntity getOwner() {
         return this.owner;
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        EntityHelpers.particleOnhitEffect(this.element.getParticle(), target, this.level(), 1);
+        return super.doHurtTarget(target);
     }
 
 

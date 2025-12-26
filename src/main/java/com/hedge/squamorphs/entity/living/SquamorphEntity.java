@@ -10,6 +10,7 @@ import com.hedge.squamorphs.entity.squamorphparts.head.SquamorphHead;
 import com.hedge.squamorphs.entity.squamorphparts.legs.SquamorphLeg;
 import com.hedge.squamorphs.entity.squamorphparts.mouth.SquamorphMouth;
 import com.hedge.squamorphs.entity.squamorphparts.tail.SquamorphTail;
+import com.hedge.squamorphs.entity.util.EntityHelpers;
 import com.hedge.squamorphs.entity.util.SquamorphHelpers;
 import com.hedge.squamorphs.entity.util.goals.SquamorphAttackGoal;
 import com.hedge.squamorphs.entity.util.goals.SquamorphWanderGoal;
@@ -48,6 +49,7 @@ import net.minecraftforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import static com.hedge.squamorphs.entity.squamorphparts.AllParts.*;
 import static com.hedge.squamorphs.entity.squamorphparts.SquamorphElement.ALL_ELEMENTS;
@@ -172,9 +174,7 @@ public class SquamorphEntity extends Animal {
 
         switch (animIndex) {
             case 1:
-                if (dist <= this.getMeleeAttackRangeSqr(target)) {
-                    this.setAttackState(1);
-                }
+                this.setAttackState(1);
                 break;
             case 2:
                 this.setAttackState(2);
@@ -190,12 +190,11 @@ public class SquamorphEntity extends Animal {
                 double d0 = this.getPerceivedTargetDistanceSquareForMeleeAttack(target);
                 switch (this.getAttackState()) {
                     case 1:
-                        if (animTicks >= 8) {
-                            this.checkAndPerformAttack(target, d0);
-                        }
+                        this.mouth.tickAttack(this, animTicks, target, d0);
                         break;
                     case 2:
                         this.head.tickAttack(this, animTicks, target, d0);
+                        break;
                 }
             }
             else {
@@ -206,23 +205,13 @@ public class SquamorphEntity extends Animal {
 
     }
 
-    public void checkAndPerformAttack(LivingEntity target, double dist) {
-        double d0 = this.getMeleeAttackRangeSqr(target);
-        if (dist <= d0) {
-            this.swing(InteractionHand.MAIN_HAND);
-            this.doHurtTarget(target);
-            this.primaryElement.applyElement(target, this, 1, 5);
-            this.animTicks = 0;
-        }
-        //this.addCooldowns();
-        this.mouthAbilityCD = 20;
-        this.setAttackState(0);
-
-    }
 
     private void tickCooldown() {
         mouthAbilityCD = Math.max(mouthAbilityCD - 1, 0);
         headAbilityCD = Math.max(headAbilityCD - 1, 0);
+        bodyAbilityCD = Math.max(bodyAbilityCD - 1, 0);
+        tailAbilityCD = Math.max(tailAbilityCD - 1, 0);
+        legAbilityCD = Math.max(legAbilityCD - 1, 0);
     }
 
     private void addCooldowns() {
@@ -232,7 +221,6 @@ public class SquamorphEntity extends Animal {
         tailAbilityCD+=5;
         legAbilityCD+=5;
     }
-
 
     @Override
     public void travel(Vec3 pTravelVector) {
@@ -453,8 +441,15 @@ public class SquamorphEntity extends Animal {
     }
 
     private void refreshMoves(SquamorphPart part) {
-        if (part.hasMelee()) this.melee_parts.add(part);
-        else if (part.hasRanged()) this.ranged_parts.add(part);
+        if (part.hasMelee()) {
+            this.melee_parts.add(part);
+            this.melee_parts.sort(Comparator.comparing(SquamorphPart::getCooldown));
+        } else if (part.hasRanged()) {
+            this.ranged_parts.add(part);
+            this.ranged_parts.sort(Comparator.comparing(SquamorphPart::getCooldown));
+
+        }
+
     }
 
     // synched data getters/setters
@@ -658,6 +653,22 @@ public class SquamorphEntity extends Animal {
 
     public void setTailCD(int i) {
         this.tailAbilityCD = i;
+    }
+
+    public void setAnimTicks(int i) {
+        this.animTicks = i;
+    }
+
+    public int getAnimTicks() {
+        return this.animTicks;
+    }
+
+    public ArrayList<SquamorphPart> getMeleeParts() {
+        return this.melee_parts;
+    }
+
+    public ArrayList<SquamorphPart> getRangedParts() {
+        return this.ranged_parts;
     }
 
 

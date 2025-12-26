@@ -46,15 +46,17 @@ public class SquamorphPart {
     public void performRangedAttack(SquamorphEntity owner, LivingEntity pTarget) {
     }
 
-        public AnimationDefinition getAbilityAnim() {
-        return squamorphAnimation.mouth_shoot;
+    public void performMeleeAttack(SquamorphEntity owner, LivingEntity pTarget, double dist) {
     }
+
+    public AnimationDefinition getAbilityAnim() {return squamorphAnimation.mouth_shoot;}
 
     public int getAbilityAnimState() {return 0;}
 
     public int getCooldown() {
         return this.cooldown;
     }
+
 
     public boolean hasMelee() {
         return false;

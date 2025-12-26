@@ -29,11 +29,11 @@ public class AllParts {
 
 
 
-    public static final SquamorphHead HEAD0 = new SquamorphHead(0, 30, "basic head", false);
-    public static final SquamorphHead HEAD1 = new SquamorphHead(1, 30, "croc eyes", true) {
+    public static final SquamorphHead HEAD0 = new SquamorphHead(0, 60, "basic head", false);
+    public static final SquamorphHead HEAD1 = new SquamorphHead(1, 60, "croc eyes", true) {
 
     };
-    public static final SquamorphHead HEAD2 = new SquamorphHead(2, 30, "spiky horns", false) {
+    public static final SquamorphHead HEAD2 = new SquamorphHead(2, 60, "spiky horns", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getSecondaryColor();
@@ -62,49 +62,49 @@ public class AllParts {
             return projectile;
         }
     };
-    public static final SquamorphHead HEAD5 = new SquamorphHead(5, 30, "head spike", false) {
+    public static final SquamorphHead HEAD5 = new SquamorphHead(5, 60, "head spike", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getSecondaryColor();
         }
     };
-    public static final SquamorphHead HEAD6 = new SquamorphHead(6, 30, "hairy head", false) {
+    public static final SquamorphHead HEAD6 = new SquamorphHead(6, 60, "hairy head", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getSecondaryColor();
         }
     };
-    public static final SquamorphHead HEAD7 = new SquamorphHead(7, 30, "head frills", false) {
+    public static final SquamorphHead HEAD7 = new SquamorphHead(7, 60, "head frills", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getSecondaryColor();
         }
     };
-    public static final SquamorphHead HEAD8 = new SquamorphHead(8, 30, "arachnid eyes", false) {
+    public static final SquamorphHead HEAD8 = new SquamorphHead(8, 60, "arachnid eyes", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getEyeColor();
         }
     };
-    public static final SquamorphHead HEAD9 = new SquamorphHead(9, 30, "tall eyes", true) {
+    public static final SquamorphHead HEAD9 = new SquamorphHead(9, 60, "tall eyes", true) {
 
     };
-    public static final SquamorphHead HEAD10 = new SquamorphHead(10, 30, "chameleon eyes", true) {
+    public static final SquamorphHead HEAD10 = new SquamorphHead(10, 60, "chameleon eyes", true) {
 
     };
-    public static final SquamorphHead HEAD11 = new SquamorphHead(11, 30, "whirl stalk", false) {
+    public static final SquamorphHead HEAD11 = new SquamorphHead(11, 60, "whirl stalk", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getSecondaryColor();
         }
     };
-    public static final SquamorphHead HEAD12 = new SquamorphHead(12, 30, "feathered crest", false) {
+    public static final SquamorphHead HEAD12 = new SquamorphHead(12, 60, "feathered crest", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getSecondaryColor();
         }
     };
-    public static final SquamorphHead HEAD13 = new SquamorphHead(13, 30, "one eye", true) {
+    public static final SquamorphHead HEAD13 = new SquamorphHead(13, 60, "one eye", true) {
 
     };
     public static final SquamorphHead HEAD14 = new SquamorphHead(14, 200, "compound eyes", true) {
@@ -119,22 +119,22 @@ public class AllParts {
         }
 
     };
-    public static final SquamorphHead HEAD15 = new SquamorphHead(15, 30, "four eyes", true) {
+    public static final SquamorphHead HEAD15 = new SquamorphHead(15, 60, "four eyes", true) {
 
     };
-    public static final SquamorphHead HEAD16 = new SquamorphHead(16, 30, "nocturnal eyes", false) {
+    public static final SquamorphHead HEAD16 = new SquamorphHead(16, 60, "nocturnal eyes", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getEyeColor();
         }
     };
-    public static final SquamorphHead HEAD17 = new SquamorphHead(17, 30, "six eyes", true) {
+    public static final SquamorphHead HEAD17 = new SquamorphHead(17, 60, "six eyes", true) {
 
     };
-    public static final SquamorphHead HEAD18 = new SquamorphHead(18, 30, "frog eyes", true) {
+    public static final SquamorphHead HEAD18 = new SquamorphHead(18, 60, "frog eyes", true) {
 
     };
-    public static final SquamorphHead HEAD19 = new SquamorphHead(19, 30, "drab antennae", false) {
+    public static final SquamorphHead HEAD19 = new SquamorphHead(19, 60, "drab antennae", false) {
 
     };
 
@@ -183,7 +183,7 @@ public class AllParts {
 
     public static final SquamorphMouth MOUTH18 = new SquamorphMouth(18,20, "saber teeth", false, false);
 
-    public static final SquamorphMouth MOUTH19 = new SquamorphMouth(19,20, "mandibles", false, false);
+    public static final SquamorphMouth MOUTH19 = new SquamorphMouth(19,40, "mandibles", false, false);
 
 
 
@@ -397,11 +397,11 @@ public class AllParts {
 
     };
 
-    public static final SquamorphTail TAIL19 = new SquamorphTail(19, 0, "whip-tail") {
+    public static final SquamorphTail TAIL19 = new SquamorphTail(19, 100, "whip-tail") {
 
     };
 
-    public static final SquamorphTail TAIL20 = new SquamorphTail(20, 0, "hand tail") {
+    public static final SquamorphTail TAIL20 = new SquamorphTail(20, 400, "hand tail") {
 
     };
 

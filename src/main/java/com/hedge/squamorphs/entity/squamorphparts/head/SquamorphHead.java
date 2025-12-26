@@ -50,6 +50,12 @@ public class SquamorphHead extends SquamorphPart {
     }
 
     @Override
+    public boolean canUseAbility(SquamorphEntity owner, LivingEntity target) {
+        double d0 = owner.getPerceivedTargetDistanceSquareForMeleeAttack(target);
+        return owner.getHeadCD() <= 0 && d0 < getRange();
+    }
+
+    @Override
     public String getName() {
         return "basic head";
     }
@@ -66,7 +72,7 @@ public class SquamorphHead extends SquamorphPart {
     @Override
     public void tickAttack(SquamorphEntity entity, int animTicks, LivingEntity target, double dist) {
         if (animTicks >= 8) {
-            this.performRangedAttack(entity, entity.getTarget());
+            this.performRangedAttack(entity, target);
             entity.setHeadCD(this.getCooldown());
             entity.setAttackState(0);
         }

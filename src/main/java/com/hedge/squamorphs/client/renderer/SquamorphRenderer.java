@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SquamorphRenderer extends MobRenderer<SquamorphEntity, SquamorphModel> {
-
+    private static ResourceLocation TEX = new ResourceLocation(Squamorphs.MODID, "textures/entity/squamorph/mouth/innermouths/innermouth_0.png");
 
     public SquamorphRenderer(EntityRendererProvider.Context pContext) {
         super(pContext, new SquamorphModel(pContext.bakeLayer(ModelLayers.SQUAMORPH_LAYER)), 0.5F);
@@ -38,7 +38,7 @@ public class SquamorphRenderer extends MobRenderer<SquamorphEntity, SquamorphMod
 
     @Override
     public ResourceLocation getTextureLocation(SquamorphEntity squamorphEntity) {
-        return new ResourceLocation(Squamorphs.MODID, "textures/entity/squamorph/mouth/innermouths/innermouth_0.png");
+        return TEX;
     }
 
     @Override
