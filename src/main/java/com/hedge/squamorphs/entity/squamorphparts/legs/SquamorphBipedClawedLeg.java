@@ -34,7 +34,7 @@ public class SquamorphBipedClawedLeg extends SquamorphBipedLeg {
     @Override
     public void tickAttack(SquamorphEntity entity, int animTicks, LivingEntity target, double dist) {
         if (animTicks == 6) {
-            entity.setDeltaMovement(entity.getDeltaMovement().add(entity.getLookAngle().scale(1.3)));
+            entity.setDeltaMovement(entity.getDeltaMovement().add(entity.getLookAngle().scale(0.8)));
         }
         else if (animTicks == 8) {
             this.performMeleeAttack(entity, target, dist);

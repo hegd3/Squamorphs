@@ -149,11 +149,6 @@ public class squamorphAnimation {
 			new Keyframe(0.0833F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
 			new Keyframe(0.1667F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 		))
-		.addAnimation("tail2", new AnimationChannel(AnimationChannel.Targets.SCALE, 
-			new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR),
-			new Keyframe(0.1667F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.6F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(0.375F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR)
-		))
 		.addAnimation("extraleftleg", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
 			new Keyframe(0.0F, KeyframeAnimations.degreeVec(-10.0F, 0.0F, 14.2658F), AnimationChannel.Interpolations.LINEAR),
 			new Keyframe(0.0417F, KeyframeAnimations.degreeVec(-10.0F, -17.5F, 14.6722F), AnimationChannel.Interpolations.LINEAR),

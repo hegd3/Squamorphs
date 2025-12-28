@@ -33,7 +33,7 @@ public class SquamorphFlyingGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return entity.getBody() instanceof SquamorphWings && entity.getNavigation().isDone() && entity.getRandom().nextInt(30) == 0;
+        return entity.getBody() instanceof SquamorphWings && !entity.isInFluidType() && entity.getNavigation().isDone() && entity.getRandom().nextInt(30) == 0;
     }
 
 

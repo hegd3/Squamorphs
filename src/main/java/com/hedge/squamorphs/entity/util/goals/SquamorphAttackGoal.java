@@ -46,7 +46,9 @@ public class SquamorphAttackGoal extends Goal {
         return true;
     }
 
-
+    private boolean wantsToStrafe() {
+        return this.entity.getMeleeParts().size() <= this.entity.getRangedParts().size(); // placeholder
+    }
 
     public void tick() {
         LivingEntity livingentity = this.entity.getTarget();
@@ -54,7 +56,7 @@ public class SquamorphAttackGoal extends Goal {
             double d0 = this.entity.getPerceivedTargetDistanceSquareForMeleeAttack(livingentity);
             boolean inRange = entity.distanceToSqr(livingentity) < this.getRangedAttackReachSqr(livingentity) && Math.abs(entity.getY() - livingentity.getY()) < 3;
             boolean inHeadRange = d0 < entity.getHead().getRange();
-            if (inRange || !inHeadRange) {
+            if (inRange || !inHeadRange || !wantsToStrafe()) {
                 this.pathToTarget(livingentity);
             } else {
                 this.strafingTick(d0, livingentity);

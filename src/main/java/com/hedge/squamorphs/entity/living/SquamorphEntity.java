@@ -14,7 +14,9 @@ import com.hedge.squamorphs.entity.util.EntityHelpers;
 import com.hedge.squamorphs.entity.util.SquamorphHelpers;
 import com.hedge.squamorphs.entity.util.goals.SquamorphAttackGoal;
 import com.hedge.squamorphs.entity.util.goals.SquamorphWanderGoal;
+import com.hedge.squamorphs.entity.util.navigation.SemiaquaticMoveControl;
 import com.hedge.squamorphs.entity.util.navigation.SmoothFlyingMoveControl;
+import com.hedge.squamorphs.entity.util.navigation.SquamorphLookControl;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -118,6 +120,8 @@ public class SquamorphEntity extends Animal {
     public SquamorphEntity(EntityType<? extends Animal> animal, Level pLevel) {
         super(animal, pLevel);
         this.navigation = new AmphibiousPathNavigation(this, this.level());
+        this.lookControl = new SquamorphLookControl(this, 40);
+        this.moveControl = new SemiaquaticMoveControl(this, 60, 40, 0.9f);
         this.setPathfindingMalus(BlockPathTypes.WATER, 0.0f);
         this.setPathfindingMalus(BlockPathTypes.WATER_BORDER, 0.0f);
         this.setMaxUpStep(1);
@@ -130,6 +134,19 @@ public class SquamorphEntity extends Animal {
                 .add(Attributes.ATTACK_KNOCKBACK, 0.5D)
                 .add(Attributes.FOLLOW_RANGE, 40F)
                 .add(Attributes.MOVEMENT_SPEED, 0.3F);
+    }
+
+    private void resetStats() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20);
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(2.0);
+        this.getAttribute(Attributes.ATTACK_KNOCKBACK).setBaseValue(0.5D);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+        this.setHealth(20);
+        this.head.applyStats(this);
+        this.mouth.applyStats(this);
+        this.body.applyStats(this);
+        this.leg.applyStats(this);
+        this.tail.applyStats(this);
     }
 
     protected void registerGoals() {
@@ -210,6 +227,7 @@ public class SquamorphEntity extends Animal {
 
 
     }
+
 
 
     private void tickCooldown() {
@@ -350,27 +368,23 @@ public class SquamorphEntity extends Animal {
         else if (key == HEAD_TYPE) {
             this.refreshHeadType();
             this.refreshMoves(this.head);
-            if (!this.level().isClientSide())
-                this.head.applyStats(this);
+            this.head.applyStats(this);
         }
 
         else if (key == BODY_TYPE) {
             this.refreshBodyType();
             this.refreshMoves(this.body);
-            if (!this.level().isClientSide())
-                this.body.applyStats(this);
+            this.body.applyStats(this);
         }
         else if (key == LEGS_TYPE) {
             this.refreshLegType();
             this.refreshMoves(this.leg);
-            if (!this.level().isClientSide())
-                this.leg.applyStats(this);
+            this.leg.applyStats(this);
         }
         else if (key == TAIL_TYPE) {
             this.refreshTailType();
             this.refreshMoves(this.tail);
-            if (!this.level().isClientSide())
-                this.tail.applyStats(this);
+            this.tail.applyStats(this);
         }
         else if (key == PRIMARY_ELEMENT) {
             this.refreshPrElement();
@@ -383,14 +397,12 @@ public class SquamorphEntity extends Animal {
         else if (key == IS_FLYING) {
             if (this.isFlying()) {
                 this.navigation = new FlyingPathNavigation(this, this.level());
-                this.moveControl = new SmoothFlyingMoveControl(this, 50, 40);
-                this.lookControl = new SmoothSwimmingLookControl(this, 40);
+                this.moveControl = new SmoothFlyingMoveControl(this, 60, 40);
                 this.setDeltaMovement(this.getDeltaMovement().add(0, 0.5, 0));
             }
             else {
                 this.navigation = new AmphibiousPathNavigation(this, this.level());
-                this.moveControl = new MoveControl(this);
-                this.lookControl = new LookControl(this);
+                this.moveControl = new SemiaquaticMoveControl(this, 60, 40, 0.9f);
             }
         }
 
@@ -459,21 +471,22 @@ public class SquamorphEntity extends Animal {
 
     }
 
-    public List<LivingEntity> aoeAttack(double vecScale, double pX, double pY, double pZ, float damage, float kbMultiplier) {
+    public List<LivingEntity> aoeAttack(double vecScale, double pX, double pY, double pZ, float damage, float kbMultiplier, int maxHit) {
 
         Vec3 lookVec = this.getLookAngle();
         Vec3 origin = this.position().add(lookVec.scale(vecScale));
-
+        int count = 0;
         AABB aoe = new AABB(origin.subtract(pX, pY, pZ), origin.add(pX, pY, pZ));
 
         List<LivingEntity> hit = this.level().getEntitiesOfClass(LivingEntity.class, aoe, (target) ->
                 target.isAlive() && this.hasLineOfSight(target) && !this.isAlliedTo(target) && this != target);
 
         for (LivingEntity target: hit) {
-
                 target.hurt(target.damageSources().mobAttack(this), damage);
                 target.knockback(0.8D + 0.5D * kbMultiplier, this.getX() - target.getX(), this.getZ() - target.getZ());
-
+                count++;
+                if (count >= maxHit)
+                    break;
 
         }
         return hit;

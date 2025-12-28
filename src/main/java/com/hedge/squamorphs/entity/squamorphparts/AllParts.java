@@ -1,5 +1,6 @@
 package com.hedge.squamorphs.entity.squamorphparts;
 
+import com.hedge.squamorphs.client.animations.SquamorphAbilityAnimation;
 import com.hedge.squamorphs.client.animations.squamorphAnimation;
 import com.hedge.squamorphs.entity.ModEntities;
 import com.hedge.squamorphs.entity.living.SquamorphEntity;
@@ -17,6 +18,7 @@ import com.hedge.squamorphs.entity.squamorphparts.tail.SquamorphSwingingTail;
 import com.hedge.squamorphs.entity.squamorphparts.tail.SquamorphTail;
 import com.hedge.squamorphs.entity.util.EntityHelpers;
 import net.minecraft.client.animation.AnimationDefinition;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
@@ -35,10 +37,38 @@ public class AllParts {
     public static final SquamorphHead HEAD1 = new SquamorphHead(1, 60, "croc eyes", true) {
 
     };
-    public static final SquamorphHead HEAD2 = new SquamorphHead(2, 60, "spiky horns", false) {
+    public static final SquamorphHead HEAD2 = new SquamorphHead(2, 200, "spiky horns", false) {
         @Override
         public int getColor(SquamorphEntity owner) {
             return owner.getSecondaryColor();
+        }
+
+        @Override
+        public boolean hasMelee() {return true;}
+
+        @Override
+        public boolean hasRanged() {return false;}
+
+        @Override
+        public AnimationDefinition getAbilityAnim(SquamorphEntity owner) {
+            return SquamorphAbilityAnimation.head_charge;
+        }
+
+        @Override
+        public void tickAttack(SquamorphEntity entity, int animTicks, LivingEntity target, double dist) {
+            if (animTicks >= 100) {
+                entity.addCooldowns();
+                entity.setHeadCD(this.getCooldown());
+                entity.setAttackState(0);
+            } else if (animTicks % 5 == 0 ) {
+                entity.setDeltaMovement(entity.getDeltaMovement().add(entity.getLookAngle().scale(0.5)));
+                entity.aoeAttack(0.5, 1, 1, 1, this.getDamage(entity), 1.2f, 5);
+            }
+        }
+
+        @Override
+        public double getRange() {
+            return 250;
         }
     };
     public static final SquamorphHead HEAD3 = new SquamorphHead(3, 60, "bat ears", false) {
@@ -152,14 +182,64 @@ public class AllParts {
     public static final SquamorphMouth MOUTH2 = new SquamorphMouth(2,20, "beaky mouth", false, false);
 
     public static final SquamorphMouth MOUTH3 = new SquamorphMouth(3,20, "vampiric fangs", false, true) {
+        @Override
         public int getColor(SquamorphEntity entity) {return entity.getSecondaryColor();}
+
+        @Override
+        public void performMeleeAttack(SquamorphEntity owner, LivingEntity target, double dist) {
+            double d0 = owner.getMeleeAttackRangeSqr(target);
+            if (dist <= d0) {
+                owner.swing(InteractionHand.MAIN_HAND);
+                if (owner.doHurtTarget(target)) {
+                    owner.getPrimaryElement().applyElement(target, owner, 1, 5);
+                    owner.heal(4.0f);
+                    EntityHelpers.particleOnhitEffect(owner.getPrimaryElement().getParticle(), target, owner.level(), 1);
+                }
+            }
+        }
+
+
     };
 
     public static final SquamorphMouth MOUTH4 = new SquamorphMouth(4,20, "venomous teeth", true, true);
 
     public static final SquamorphMouth MOUTH5 = new SquamorphMouth(5,20, "hatchet snout", true, true);
 
-    public static final SquamorphMouth MOUTH6 = new SquamorphMouth(6,20, "tusked snout", true, true);
+    public static final SquamorphMouth MOUTH6 = new SquamorphMouth(6,30, "tusked snout", true, true) {
+        @Override
+        public void performMeleeAttack(SquamorphEntity owner, LivingEntity target, double dist) {
+            List<LivingEntity> hit = owner.aoeAttack(1.0, 1.5, 2, 1, this.getDamage(owner), 1.1f, 4);
+            for (LivingEntity entity : hit) {
+                double kb = 0.5 - (entity.getAttribute(Attributes.KNOCKBACK_RESISTANCE).getValue());
+                if (kb > 0) {
+                    entity.setDeltaMovement(entity.getDeltaMovement().add(0, kb, 0));
+                }
+                owner.getPrimaryElement().applyElement(entity, owner, 1, 1);
+                EntityHelpers.particleOnhitEffect(owner.getPrimaryElement().getParticle(), entity, owner.level(), 1);
+            }
+        }
+
+        @Override
+        public void tickAttack(SquamorphEntity entity, int animTicks, LivingEntity target, double dist) {
+            if (animTicks == 10) {
+                this.performMeleeAttack(entity, target, dist);
+            } else if (animTicks >= 15) {
+                entity.addCooldowns();
+                entity.setMouthCD(this.getCooldown());
+                entity.setAttackState(0);
+            }
+        }
+
+        @Override
+        public float getDamage(SquamorphEntity owner) {
+            return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2f;
+        }
+
+        @Override
+        public AnimationDefinition getAbilityAnim(SquamorphEntity owner) {
+            return SquamorphAbilityAnimation.head_flick;
+        }
+    };
 
     public static final SquamorphMouth MOUTH7 = new SquamorphMouth(7,80, "sawtooth", false, true) {
         @Override
@@ -186,7 +266,7 @@ public class AllParts {
 
         @Override
         public void performMeleeAttack(SquamorphEntity owner, LivingEntity target, double dist) {
-            List<LivingEntity> hit = owner.aoeAttack(0.75, 1.2, 1, 0.75, this.getDamage(owner), 0);
+            List<LivingEntity> hit = owner.aoeAttack(0.75, 1.2, 1, 0.75, this.getDamage(owner), 0, 8);
             for (LivingEntity entity: hit) {
                 owner.getPrimaryElement().applyElement(entity, owner, 1, 1);
                 EntityHelpers.particleOnhitEffect(owner.getPrimaryElement().getParticle(), entity, owner.level(), 1);

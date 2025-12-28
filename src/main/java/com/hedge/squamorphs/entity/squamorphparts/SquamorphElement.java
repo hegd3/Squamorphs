@@ -103,13 +103,20 @@ public class SquamorphElement {
         @Override
         public void applyElement(Entity affected, LivingEntity owner, int level, int chance) {
             if (affected instanceof LivingEntity e) {
-                e.knockback(level * 0.1, owner.getX() - affected.getX(), owner.getZ() - affected.getZ());
+                e.knockback(level * 0.3, owner.getX() - affected.getX(), owner.getZ() - affected.getZ());
             }
         }
 
         @Override
         public SimpleParticleType getParticle() {
             return ParticleTypes.ASH;
+        }
+
+        @Override
+        public String getDescription() {
+            return "§fAttacks using the §C§nFORCE §f§relement knock enemies farther back and additionally inflict the §C§nUNBRACED" +
+                    " §f§reffect, which increases the amount of fall damage the afflicted experiences.  Squamorphs with the element also" +
+                    " heal upon falling, scaling with the height of their descent.";
         }
     };
 
@@ -126,6 +133,10 @@ public class SquamorphElement {
 
     public String getElementName() {
         return this.name;
+    }
+
+    public String getDescription() {
+        return "";
     }
 
     public void applyElement(Entity affected, LivingEntity owner, int level, int chance) {

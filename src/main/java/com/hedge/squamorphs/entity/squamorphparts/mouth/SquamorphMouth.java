@@ -7,6 +7,7 @@ import com.hedge.squamorphs.entity.util.EntityHelpers;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class SquamorphMouth extends SquamorphPart {
 
@@ -31,9 +32,10 @@ public class SquamorphMouth extends SquamorphPart {
         double d0 = owner.getMeleeAttackRangeSqr(target);
         if (dist <= d0) {
             owner.swing(InteractionHand.MAIN_HAND);
-            owner.doHurtTarget(target);
-            owner.getPrimaryElement().applyElement(target, owner, 1, 5);
-            EntityHelpers.particleOnhitEffect(owner.getPrimaryElement().getParticle(), target, owner.level(), 1);
+            if (owner.doHurtTarget(target)) {
+                owner.getPrimaryElement().applyElement(target, owner, 1, 5);
+                EntityHelpers.particleOnhitEffect(owner.getPrimaryElement().getParticle(), target, owner.level(), 1);
+            }
         }
     }
 
@@ -64,6 +66,11 @@ public class SquamorphMouth extends SquamorphPart {
     @Override
     public boolean canUseAbility(SquamorphEntity owner, LivingEntity target) {
         return owner.getMouthAbilityCD() <= 0 && owner.getPerceivedTargetDistanceSquareForMeleeAttack(target) <= owner.getBbWidth() * 2.0F * owner.getBbWidth() * 2.0F + target.getBbWidth() && Math.abs(owner.getY() - target.getY()) < 3;
+    }
+
+    @Override
+    public float getDamage(SquamorphEntity owner) {
+        return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
     }
 
 }

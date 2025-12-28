@@ -1,15 +1,24 @@
 package com.hedge.squamorphs.entity.squamorphparts;
 
+import com.google.common.collect.Maps;
 import com.hedge.squamorphs.client.animations.squamorphAnimation;
 import com.hedge.squamorphs.entity.living.SquamorphEntity;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+
+import java.util.Map;
+import java.util.UUID;
 
 public class SquamorphPart {
 
     private final int cooldown;
     private final int index;
     private final String name;
+
     public SquamorphPart(int index, int cooldown, String name) {
         this.cooldown = cooldown;
         this.index = index;
@@ -21,10 +30,6 @@ public class SquamorphPart {
     }
 
     public void applyStats(SquamorphEntity owner) {
-    }
-
-    public void removeStats(SquamorphEntity owner) {
-
     }
 
     public int getColor(SquamorphEntity owner) {

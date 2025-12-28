@@ -41,7 +41,7 @@ public class SquamorphSwingingTail extends SquamorphTail {
     @Override
     public void performMeleeAttack(SquamorphEntity owner, LivingEntity target, double dist) {
 
-        List<LivingEntity> hit = owner.aoeAttack(1.5, 2, 1, 2, this.getDamage(owner), 2);
+        List<LivingEntity> hit = owner.aoeAttack(1.5, 2, 1, 2, this.getDamage(owner), 2, 10);
         for (LivingEntity entity: hit) {
             owner.getSecondaryElement().applyElement(entity, owner, 1, 5);
             EntityHelpers.particleOnhitEffect(owner.getSecondaryElement().getParticle(), entity, owner.level(), 1);
