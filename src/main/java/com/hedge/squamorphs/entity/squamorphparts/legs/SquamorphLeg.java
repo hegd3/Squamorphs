@@ -35,6 +35,6 @@ public class SquamorphLeg extends SquamorphPart {
     }
 
     public float getAnimSpeed() {
-        return 2.5f;
+        return 1.4f;
     }
 }

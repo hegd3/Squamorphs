@@ -258,7 +258,13 @@ public class SquamorphEntity extends Animal {
 
     }
 
+    /*
+    @Override
+    public boolean isAlliedTo(Entity pEntity) {
+        return pEntity.isAlliedTo(this) || super.isAlliedTo(pEntity);
+    }
 
+     */
 
     @Override
     protected void defineSynchedData() {
@@ -269,6 +275,11 @@ public class SquamorphEntity extends Animal {
         this.entityData.define(LEGS_TYPE, -1);
         this.entityData.define(TAIL_TYPE, -1);
         this.entityData.define(PATTERN_TYPE, -1);
+        this.entityData.define(HEAD_LEVEL, 0);
+        this.entityData.define(MOUTH_LEVEL, 0);
+        this.entityData.define(BODY_LEVEL, 0);
+        this.entityData.define(LEGS_LEVEL, 0);
+        this.entityData.define(TAIL_LEVEL, 0);
         this.entityData.define(PRIMARY_ELEMENT, 0);
         this.entityData.define(SECONDARY_ELEMENT, 0);
         this.entityData.define(PRIMARY_COLOR, 0);
@@ -294,6 +305,12 @@ public class SquamorphEntity extends Animal {
         tag.putInt("secondary_color", this.getSecondaryColor());
         tag.putInt("eye_color", this.getEyeColor());
         tag.putInt("attack_state", this.getAttackState());
+        tag.putInt("head_level", this.getHeadLevel());
+        tag.putInt("mouth_level", this.getMouthLevel());
+        tag.putInt("body_level", this.getBodyLevel());
+        tag.putInt("legs_level", this.getLegsLevel());
+        tag.putInt("tail_level", this.getTailLevel());
+
         tag.putBoolean("is_flying", this.isFlying());
     }
 
@@ -306,12 +323,19 @@ public class SquamorphEntity extends Animal {
         this.setBodyType(tag.getInt("body_type"));
         this.setMouthType(tag.getInt("mouth_type"));
         this.setLegType(tag.getInt("legs_type"));
+        this.setTailType(tag.getInt("tail_type"));
         this.setPatternType(tag.getInt("pattern_type"));
         this.setPrimaryColor(tag.getInt("primary_color"));
         this.setSecondaryColor(tag.getInt("secondary_color"));
         this.setEyeColor(tag.getInt("eye_color"));
         this.setAttackState(tag.getInt("attack_state"));
         this.setFlying(tag.getBoolean("is_flying"));
+        this.setHeadLevel(tag.getInt("head_level"));
+        this.setMouthLevel(tag.getInt("mouth_level"));
+        this.setBodyLevel(tag.getInt("body_level"));
+        this.setLegsLevel(tag.getInt("legs_level"));
+        this.setTailLevel(tag.getInt("tail_level"));
+
     }
 
     @Override
@@ -707,6 +731,46 @@ public class SquamorphEntity extends Animal {
 
     public void setTailCD(int i) {
         this.tailAbilityCD = i;
+    }
+
+    public int getHeadLevel() {
+        return this.entityData.get(HEAD_LEVEL);
+    }
+
+    public int getMouthLevel() {
+        return this.entityData.get(MOUTH_LEVEL);
+    }
+
+    public int getBodyLevel() {
+        return this.entityData.get(BODY_LEVEL);
+    }
+
+    public int getLegsLevel() {
+        return this.entityData.get(LEGS_LEVEL);
+    }
+
+    public int getTailLevel() {
+        return this.entityData.get(TAIL_LEVEL);
+    }
+
+    public void setHeadLevel(int i) {
+        this.entityData.set(HEAD_LEVEL, i);
+    }
+
+    public void setMouthLevel(int i) {
+        this.entityData.set(MOUTH_LEVEL, i);
+    }
+
+    public void setBodyLevel(int i) {
+        this.entityData.set(BODY_LEVEL, i);
+    }
+
+    public void setLegsLevel(int i) {
+        this.entityData.set(LEGS_LEVEL, i);
+    }
+
+    public void setTailLevel(int i) {
+        this.entityData.set(TAIL_LEVEL, i);
     }
 
     public void setAnimTicks(int i) {

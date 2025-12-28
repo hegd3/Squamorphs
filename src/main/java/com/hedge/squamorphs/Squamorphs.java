@@ -2,6 +2,7 @@ package com.hedge.squamorphs;
 
 import com.hedge.squamorphs.client.renderer.*;
 import com.hedge.squamorphs.entity.ModEntities;
+import com.hedge.squamorphs.entity.living.summons.ElementalSpiritEntity;
 import com.hedge.squamorphs.items.ModCreativeModeTab;
 import com.hedge.squamorphs.items.ModItems;
 import com.mojang.logging.LogUtils;
@@ -82,6 +83,8 @@ public class Squamorphs
             EntityRenderers.register(ModEntities.SQUAMORPH.get(), SquamorphRenderer::new);
 
             EntityRenderers.register(ModEntities.ELEMENTAL_FLY.get(), ElementalFlyRenderer::new);
+
+            EntityRenderers.register(ModEntities.ELEMENTAL_SPIRIT.get(), ElementalSpiritRenderer::new);
 
             EntityRenderers.register(ModEntities.BOLT.get(), BoltRenderer::new);
 

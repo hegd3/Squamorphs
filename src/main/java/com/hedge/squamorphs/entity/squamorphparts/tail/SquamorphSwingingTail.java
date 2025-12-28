@@ -51,7 +51,7 @@ public class SquamorphSwingingTail extends SquamorphTail {
 
     @Override
     public float getDamage(SquamorphEntity owner) {
-        return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 1.5f;
+        return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 1.5f + (float)Math.pow(owner.getTailLevel(), 2) * 5;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.hedge.squamorphs.client.renderer;
 
 import com.hedge.squamorphs.Squamorphs;
+import com.hedge.squamorphs.client.modellayers.AllTextures;
 import com.hedge.squamorphs.client.modellayers.ModelLayers;
 import com.hedge.squamorphs.client.models.SquamorphProjectileModel;
 import com.hedge.squamorphs.entity.living.summons.ElementalFlyEntity;
@@ -16,11 +17,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 public class BoltRenderer extends EntityRenderer<BoltProjectile> {
-
+    private static final ResourceLocation[] BOLT_TEX = AllTextures.generateElementTextureArray("textures/entity/projectile/bolt/bolt");
     private final SquamorphProjectileModel model;
 
     public BoltRenderer(EntityRendererProvider.Context pContext) {
@@ -30,7 +32,7 @@ public class BoltRenderer extends EntityRenderer<BoltProjectile> {
 
     @Override
     public ResourceLocation getTextureLocation(BoltProjectile pEntity) {
-        return new ResourceLocation(Squamorphs.MODID, "textures/entity/projectile/bolt/bolt_" + pEntity.getElement().getElementName() + ".png");
+        return BOLT_TEX[pEntity.getElementIndex()];
     }
 
     @Override

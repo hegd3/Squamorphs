@@ -3,6 +3,7 @@ package com.hedge.squamorphs.entity;
 import com.hedge.squamorphs.Squamorphs;
 import com.hedge.squamorphs.entity.living.SquamorphEntity;
 import com.hedge.squamorphs.entity.living.summons.ElementalFlyEntity;
+import com.hedge.squamorphs.entity.living.summons.ElementalSpiritEntity;
 import com.hedge.squamorphs.entity.projectile.BlastProjectile;
 import com.hedge.squamorphs.entity.projectile.BoltProjectile;
 import com.hedge.squamorphs.entity.projectile.SonarProjectile;
@@ -23,7 +24,11 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<ElementalFlyEntity>> ELEMENTAL_FLY =
             ENTITY_TYPES.register("elemental_fly", () -> EntityType.Builder.of(ElementalFlyEntity::new, MobCategory.CREATURE)
-                    .sized(0.5f, 0.4f).build("sonar"));
+                    .sized(0.5f, 0.4f).build("elemental_fly"));
+
+    public static final RegistryObject<EntityType<ElementalSpiritEntity>> ELEMENTAL_SPIRIT =
+            ENTITY_TYPES.register("elemental_spirit", () -> EntityType.Builder.of(ElementalSpiritEntity::new, MobCategory.CREATURE)
+                    .sized(0.8f, 1.9f).build("elemental_spirit"));
 
     public static final RegistryObject<EntityType<BoltProjectile>> BOLT =
             ENTITY_TYPES.register("bolt", () -> EntityType.Builder.of(BoltProjectile::new, MobCategory.MISC)

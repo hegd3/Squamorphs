@@ -65,6 +65,6 @@ public class SquamorphBipedClawedLeg extends SquamorphBipedLeg {
 
     @Override
     public float getDamage(SquamorphEntity owner) {
-        return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 1.5f;
+        return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 1.5f + (float)Math.pow(owner.getLegsLevel(), 2) * 2;
     }
 }

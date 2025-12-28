@@ -23,6 +23,7 @@ public class SquamorphHead extends SquamorphPart {
         BoltProjectile projectile = ModEntities.BOLT.get().create(level);
         if (projectile != null) {
             projectile.setOwner(entity);
+            projectile.setLvl(entity.getHeadLevel());
             projectile.setElementIndex(entity.getPrimaryElementIndex());
         }
         return projectile;
@@ -51,8 +52,7 @@ public class SquamorphHead extends SquamorphPart {
 
     @Override
     public boolean canUseAbility(SquamorphEntity owner, LivingEntity target) {
-        double d0 = owner.getPerceivedTargetDistanceSquareForMeleeAttack(target);
-        return owner.getHeadCD() <= 0 && d0 < getRange();
+        return owner.getHeadCD() <= 0 && owner.getPerceivedTargetDistanceSquareForMeleeAttack(target) < getRange();
     }
 
     @Override

@@ -70,7 +70,7 @@ public class SquamorphMouth extends SquamorphPart {
 
     @Override
     public float getDamage(SquamorphEntity owner) {
-        return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+        return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * (float)Math.pow((owner.getMouthLevel() + 1), 2);
     }
 
 }

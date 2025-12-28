@@ -1,6 +1,7 @@
 package com.hedge.squamorphs.client.renderer;
 
 import com.hedge.squamorphs.Squamorphs;
+import com.hedge.squamorphs.client.modellayers.AllTextures;
 import com.hedge.squamorphs.client.modellayers.ModelLayers;
 import com.hedge.squamorphs.client.models.SquamorphProjectileModel;
 import com.hedge.squamorphs.entity.projectile.BlastProjectile;
@@ -20,7 +21,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 public class BlastRenderer extends EntityRenderer<BlastProjectile> {
-
+    private static final ResourceLocation[] BLAST_TEX = AllTextures.generateElementTextureArray("textures/entity/projectile/blast/blast");
     private final SquamorphProjectileModel model;
 
     public BlastRenderer(EntityRendererProvider.Context pContext) {
@@ -30,7 +31,7 @@ public class BlastRenderer extends EntityRenderer<BlastProjectile> {
 
     @Override
     public ResourceLocation getTextureLocation(BlastProjectile pEntity) {
-        return new ResourceLocation(Squamorphs.MODID, "textures/entity/projectile/blast/blast_" + pEntity.getElement().getElementName() + ".png");
+        return BLAST_TEX[pEntity.getElementIndex()];
     }
 
     @Override

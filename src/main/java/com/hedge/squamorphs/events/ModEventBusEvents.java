@@ -4,6 +4,7 @@ import com.hedge.squamorphs.Squamorphs;
 import com.hedge.squamorphs.entity.ModEntities;
 import com.hedge.squamorphs.entity.living.SquamorphEntity;
 import com.hedge.squamorphs.entity.living.summons.ElementalFlyEntity;
+import com.hedge.squamorphs.entity.living.summons.ElementalSpiritEntity;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,6 +18,8 @@ public class ModEventBusEvents {
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(ModEntities.SQUAMORPH.get(), SquamorphEntity.bakeAttributes().build());
         event.put(ModEntities.ELEMENTAL_FLY.get(), ElementalFlyEntity.bakeAttributes().build());
+        event.put(ModEntities.ELEMENTAL_SPIRIT.get(), ElementalSpiritEntity.bakeAttributes().build());
+
     }
 
     @SubscribeEvent

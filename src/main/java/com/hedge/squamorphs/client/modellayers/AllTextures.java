@@ -1,6 +1,7 @@
 package com.hedge.squamorphs.client.modellayers;
 
 import com.hedge.squamorphs.Squamorphs;
+import com.hedge.squamorphs.entity.squamorphparts.SquamorphElement;
 import net.minecraft.resources.ResourceLocation;
 
 public class AllTextures {
@@ -22,6 +23,17 @@ public class AllTextures {
         for (int i = 0; i < size; i++) {
             arr[i] = new ResourceLocation(Squamorphs.MODID, "textures/entity/squamorph/" + part + "/"
                     + part + "_" + (i + 1) + ".png");
+        }
+
+        return arr;
+
+    }
+
+    public static ResourceLocation[] generateElementTextureArray(String path) {
+        ResourceLocation[] arr = new ResourceLocation[SquamorphElement.ALL_ELEMENTS.length];
+
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = new ResourceLocation(Squamorphs.MODID, path + "_" + SquamorphElement.ALL_ELEMENTS[i].getElementName() + ".png");
         }
 
         return arr;

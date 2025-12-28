@@ -5,6 +5,7 @@ import com.hedge.squamorphs.client.animations.squamorphAnimation;
 import com.hedge.squamorphs.entity.ModEntities;
 import com.hedge.squamorphs.entity.living.SquamorphEntity;
 import com.hedge.squamorphs.entity.living.summons.ElementalFlyEntity;
+import com.hedge.squamorphs.entity.living.summons.ElementalSpiritEntity;
 import com.hedge.squamorphs.entity.projectile.BlastProjectile;
 import com.hedge.squamorphs.entity.projectile.BoltProjectile;
 import com.hedge.squamorphs.entity.projectile.SonarProjectile;
@@ -16,6 +17,7 @@ import com.hedge.squamorphs.entity.squamorphparts.legs.*;
 import com.hedge.squamorphs.entity.squamorphparts.mouth.SquamorphMouth;
 import com.hedge.squamorphs.entity.squamorphparts.tail.SquamorphSwingingTail;
 import com.hedge.squamorphs.entity.squamorphparts.tail.SquamorphTail;
+import com.hedge.squamorphs.entity.squamorphparts.tail.SquamorphWaggingTail;
 import com.hedge.squamorphs.entity.util.EntityHelpers;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.world.InteractionHand;
@@ -78,6 +80,7 @@ public class AllParts {
             SonarProjectile projectile = ModEntities.SONAR.get().create(level);
             if (projectile != null) {
                 projectile.setOwner(entity);
+                projectile.setLvl(entity.getHeadLevel());
                 projectile.setElementIndex(entity.getPrimaryElementIndex());
             }
             return projectile;
@@ -89,6 +92,7 @@ public class AllParts {
             BlastProjectile projectile = ModEntities.BLAST.get().create(level);
             if (projectile != null) {
                 projectile.setOwner(entity);
+                projectile.setLvl(entity.getHeadLevel());
                 projectile.setElementIndex(entity.getPrimaryElementIndex());
             }
             return projectile;
@@ -145,7 +149,7 @@ public class AllParts {
         public void performRangedAttack(SquamorphEntity owner, LivingEntity pTarget) {
             ElementalFlyEntity fly = ModEntities.ELEMENTAL_FLY.get().create(owner.level());
             if (fly != null) {
-                fly.summon(owner, owner.getPrimaryElementIndex(), 1);
+                fly.summon(owner, owner.getPrimaryElementIndex(), owner.getHeadLevel());
                 owner.level().addFreshEntity(fly);
             }
         }
@@ -232,7 +236,7 @@ public class AllParts {
 
         @Override
         public float getDamage(SquamorphEntity owner) {
-            return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2f;
+            return super.getDamage(owner) + owner.getMouthLevel() * owner.getMouthLevel() * 1.2f;
         }
 
         @Override
@@ -276,7 +280,7 @@ public class AllParts {
 
         @Override
         public float getDamage(SquamorphEntity owner) {
-            return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 0.25f;
+            return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 0.25f + owner.getMouthLevel() * owner.getMouthLevel() * 0.5f;
         }
     };
 
@@ -378,6 +382,7 @@ public class AllParts {
             BoltProjectile projectile = ModEntities.BOLT.get().create(owner.level());
             if (projectile != null) {
                 projectile.setOwner(owner);
+                projectile.setLvl(owner.getBodyLevel());
                 projectile.setElementIndex(owner.getSecondaryElementIndex());
                 projectile.moveTo(owner.getX(), owner.getY() + 0.2, owner.getZ());
                 double d0 = pTarget.getX() - owner.getX();
@@ -513,7 +518,7 @@ public class AllParts {
 
     };
 
-    public static final SquamorphTail TAIL3 = new SquamorphSwingingTail(3, 100, "tail club") {
+    public static final SquamorphTail TAIL3 = new SquamorphSwingingTail(3, 60, "tail club") {
 
     };
 
@@ -537,7 +542,7 @@ public class AllParts {
 
     };
 
-    public static final SquamorphTail TAIL9 = new SquamorphTail(9, 100, "stinger") {
+    public static final SquamorphTail TAIL9 = new SquamorphTail(9, 60, "stinger") {
         public boolean hasMelee() {return true;}
 
     };
@@ -562,7 +567,7 @@ public class AllParts {
 
     };
 
-    public static final SquamorphTail TAIL15 = new SquamorphSwingingTail(15, 100, "plated tail") {
+    public static final SquamorphTail TAIL15 = new SquamorphSwingingTail(15, 60, "plated tail") {
 
     };
 
@@ -578,12 +583,19 @@ public class AllParts {
 
     };
 
-    public static final SquamorphTail TAIL19 = new SquamorphSwingingTail(19, 100, "whip-tail") {
+    public static final SquamorphTail TAIL19 = new SquamorphSwingingTail(19, 60, "whip-tail") {
 
     };
 
-    public static final SquamorphTail TAIL20 = new SquamorphTail(20, 400, "hand tail") {
-
+    public static final SquamorphTail TAIL20 = new SquamorphWaggingTail(20, 400, "hand tail") {
+        @Override
+        public void performRangedAttack(SquamorphEntity owner, LivingEntity pTarget) {
+            ElementalSpiritEntity spirit = ModEntities.ELEMENTAL_SPIRIT.get().create(owner.level());
+            if (spirit != null) {
+                spirit.summon(owner, owner.getSecondaryElementIndex(), owner.getTailLevel());
+                owner.level().addFreshEntity(spirit);
+            }
+        }
     };
 
     public static final SquamorphTail[] ALL_TAILS = {TAIL0, TAIL1, TAIL2, TAIL3, TAIL4, TAIL5, TAIL6, TAIL7, TAIL8, TAIL9, TAIL10,

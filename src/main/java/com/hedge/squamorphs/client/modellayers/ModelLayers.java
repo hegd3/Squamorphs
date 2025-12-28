@@ -11,6 +11,7 @@ public class ModelLayers {
     public static final ModelLayerLocation SQUAMORPH_LAYER = main("squamorph");
     public static final ModelLayerLocation PROJECTILE_LAYER = main("projectile");
     public static final ModelLayerLocation FLY_LAYER = main("fly");
+    public static final ModelLayerLocation SPIRIT_LAYER = main("spirit");
 
     private static ModelLayerLocation main(String id) {
         return new ModelLayerLocation(new ResourceLocation(Squamorphs.MODID, id), "main");

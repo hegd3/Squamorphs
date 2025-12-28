@@ -66,7 +66,7 @@ public abstract class SquamorphProjectile extends Projectile {
     @Override
     protected boolean canHitEntity(Entity target) {
         var owner = getOwner();
-        return super.canHitEntity(target) && target != owner && (owner == null || !owner.isAlliedTo(target));
+        return super.canHitEntity(target) && target != owner && (owner == null || (!owner.isAlliedTo(target)));
     }
 
     @Override

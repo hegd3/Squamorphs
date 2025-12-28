@@ -1,6 +1,7 @@
 package com.hedge.squamorphs.client.renderer;
 
 import com.hedge.squamorphs.Squamorphs;
+import com.hedge.squamorphs.client.modellayers.AllTextures;
 import com.hedge.squamorphs.client.modellayers.ModelLayers;
 import com.hedge.squamorphs.client.models.SquamorphProjectileModel;
 import com.hedge.squamorphs.entity.projectile.BoltProjectile;
@@ -20,7 +21,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 public class SonarRenderer extends EntityRenderer<SonarProjectile> {
-
+    private static final ResourceLocation[] SONAR_TEX = AllTextures.generateElementTextureArray("textures/entity/projectile/sonar/sonar");
     private final SquamorphProjectileModel model;
 
     public SonarRenderer(EntityRendererProvider.Context pContext) {
@@ -30,7 +31,7 @@ public class SonarRenderer extends EntityRenderer<SonarProjectile> {
 
     @Override
     public ResourceLocation getTextureLocation(SonarProjectile pEntity) {
-        return new ResourceLocation(Squamorphs.MODID, "textures/entity/projectile/sonar/sonar_" + pEntity.getElement().getElementName() + ".png");
+        return SONAR_TEX[pEntity.getElementIndex()];
     }
 
     @Override

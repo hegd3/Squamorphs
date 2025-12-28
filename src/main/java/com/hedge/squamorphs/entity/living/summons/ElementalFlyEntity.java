@@ -51,11 +51,6 @@ public class ElementalFlyEntity extends SquamorphSummon {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-    }
-
-    @Override
     public void tickClient() {
 
     }
@@ -70,7 +65,7 @@ public class ElementalFlyEntity extends SquamorphSummon {
                 LivingEntity target = this.getTarget();
                 if (target != null && this.distanceToSqr(target) <= this.getAttackRangeSqr(target)) {
                     this.doHurtTarget(target);
-                    this.getElement().applyElement(target, this, 0, 5);
+                    this.getElement().applyElement(target, this, this.getSummonLevel(), 5);
                 }
                 this.setAttackState(0);
                 this.animTicks = 0;
@@ -128,6 +123,6 @@ public class ElementalFlyEntity extends SquamorphSummon {
 
     @Override
     public void resetAttackCD() {
-        this.attackCD = 30;
+        this.attackCD = 15;
     }
 }
