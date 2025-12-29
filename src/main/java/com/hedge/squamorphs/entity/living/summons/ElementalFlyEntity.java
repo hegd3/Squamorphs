@@ -2,10 +2,7 @@ package com.hedge.squamorphs.entity.living.summons;
 
 
 import com.hedge.squamorphs.entity.living.SquamorphEntity;
-import com.hedge.squamorphs.entity.util.goals.GenericFlyingGoal;
-import com.hedge.squamorphs.entity.util.goals.GenericMeleeGoal;
-import com.hedge.squamorphs.entity.util.goals.OwnableEntityOwnerHurtByTargetGoal;
-import com.hedge.squamorphs.entity.util.goals.OwnableEntityOwnerHurtTargetGoal;
+import com.hedge.squamorphs.entity.util.goals.*;
 import com.hedge.squamorphs.entity.util.navigation.SmoothFlyingMoveControl;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -43,7 +40,7 @@ public class ElementalFlyEntity extends SquamorphSummon {
     protected void registerGoals() {
         this.goalSelector.addGoal(5, new GenericFlyingGoal(this));
         this.goalSelector.addGoal(0, new GenericMeleeGoal<>(this, 1.2, true));
-
+        this.goalSelector.addGoal(3, new SquamorphSummonFollowGoal(this));
 
         this.targetSelector.addGoal(0, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(1, new OwnableEntityOwnerHurtByTargetGoal<>(this, false));

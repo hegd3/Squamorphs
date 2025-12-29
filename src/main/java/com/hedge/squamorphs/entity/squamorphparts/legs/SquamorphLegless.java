@@ -20,6 +20,9 @@ public class SquamorphLegless extends SquamorphLeg {
         return squamorphAnimation.legless_idle;
     }
 
-
+    @Override
+    public float getAnimSpeed() {
+        return 2.5f;
+    }
 
 }

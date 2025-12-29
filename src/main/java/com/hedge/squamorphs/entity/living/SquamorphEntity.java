@@ -14,9 +14,8 @@ import com.hedge.squamorphs.entity.util.EntityHelpers;
 import com.hedge.squamorphs.entity.util.SquamorphHelpers;
 import com.hedge.squamorphs.entity.util.goals.SquamorphAttackGoal;
 import com.hedge.squamorphs.entity.util.goals.SquamorphWanderGoal;
-import com.hedge.squamorphs.entity.util.navigation.SemiaquaticMoveControl;
-import com.hedge.squamorphs.entity.util.navigation.SmoothFlyingMoveControl;
 import com.hedge.squamorphs.entity.util.navigation.SquamorphLookControl;
+import com.hedge.squamorphs.entity.util.navigation.SquamorphMoveControl;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -24,13 +23,9 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.LookControl;
-import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -38,9 +33,7 @@ import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -102,6 +95,7 @@ public class SquamorphEntity extends Animal {
     private SquamorphBody body = ALL_BODIES[0];
     private SquamorphLeg leg = ALL_LEGS[0];
     private SquamorphTail tail = ALL_TAILS[0];
+    private SquamorphPart currentMove;
     private ArrayList<SquamorphPart> ranged_parts = new ArrayList<SquamorphPart>();
     private ArrayList<SquamorphPart> melee_parts = new ArrayList<SquamorphPart>();
 
@@ -121,7 +115,7 @@ public class SquamorphEntity extends Animal {
         super(animal, pLevel);
         this.navigation = new AmphibiousPathNavigation(this, this.level());
         this.lookControl = new SquamorphLookControl(this, 40);
-        this.moveControl = new SemiaquaticMoveControl(this, 60, 40, 0.9f);
+        this.moveControl = new SquamorphMoveControl(this, 60, 40, 0.9f);
         this.setPathfindingMalus(BlockPathTypes.WATER, 0.0f);
         this.setPathfindingMalus(BlockPathTypes.WATER_BORDER, 0.0f);
         this.setMaxUpStep(1);
@@ -172,6 +166,11 @@ public class SquamorphEntity extends Animal {
 
         if (this.level().isClientSide()) {
             setUpAnimStates();
+            if (this.getAttackState() > 0) {
+                animTicks++;
+            } else {
+                animTicks = 0;
+            }
         } else {
             /*
             this.head.tick();
@@ -201,33 +200,20 @@ public class SquamorphEntity extends Animal {
         if (this.getAttackState() > 0) {
             if (target != null) {
                 animTicks++;
-                double d0 = this.getPerceivedTargetDistanceSquareForMeleeAttack(target);
-                switch (this.getAttackState()) {
-                    case 1:
-                        this.mouth.tickAttack(this, animTicks, target, d0);
-                        break;
-                    case 2:
-                        this.head.tickAttack(this, animTicks, target, d0);
-                        break;
-                    case 3:
-                        this.body.tickAttack(this, animTicks, target, d0);
-                        break;
-                    case 4:
-                        this.leg.tickAttack(this, animTicks, target, d0);
-                        break;
-                    case 5:
-                        this.tail.tickAttack(this, animTicks, target, d0);
-                        break;
+                if (this.getCurrentMove() != null) {
+                    double d0 = this.getPerceivedTargetDistanceSquareForMeleeAttack(target);
+                    this.currentMove.tickAttack(this, animTicks, target, d0);
                 }
             }
             else {
                 this.setAttackState(0);
+                this.addCooldowns();
+                this.resetMove();
             }
         }
 
 
     }
-
 
 
     private void tickCooldown() {
@@ -421,12 +407,10 @@ public class SquamorphEntity extends Animal {
         else if (key == IS_FLYING) {
             if (this.isFlying()) {
                 this.navigation = new FlyingPathNavigation(this, this.level());
-                this.moveControl = new SmoothFlyingMoveControl(this, 60, 40);
                 this.setDeltaMovement(this.getDeltaMovement().add(0, 0.5, 0));
             }
             else {
                 this.navigation = new AmphibiousPathNavigation(this, this.level());
-                this.moveControl = new SemiaquaticMoveControl(this, 60, 40, 0.9f);
             }
         }
 
@@ -454,6 +438,30 @@ public class SquamorphEntity extends Animal {
     @Override
     public boolean isPushedByFluid() {
         return false;
+    }
+
+    @Override
+    public boolean isImmobile() {
+        if (this.getCurrentMove() != null) {
+            return this.getCurrentMove().isImmobileWhenUsing(this) || super.isImmobile();
+        }
+        return super.isImmobile();
+    }
+
+    @Override
+    public boolean isInvulnerable() {
+        if (this.getCurrentMove() != null) {
+            return this.getCurrentMove().isInvulernableWhenUsing(this) || super.isInvulnerable();
+        }
+        return super.isInvulnerable();
+    }
+
+    @Override
+    public boolean isAlliedTo(Entity pEntity) {
+        if (pEntity instanceof OwnableEntity e && e.getOwner() == this) {
+            return true;
+        }
+        return super.isAlliedTo(pEntity);
     }
 
     @Override
@@ -495,7 +503,7 @@ public class SquamorphEntity extends Animal {
 
     }
 
-    public List<LivingEntity> aoeAttack(double vecScale, double pX, double pY, double pZ, float damage, float kbMultiplier, int maxHit) {
+    public List<LivingEntity> aoeAttack(double vecScale, double pX, double pY, double pZ, float damage, float kbMultiplier, int maxHit, SquamorphElement element, int level) {
 
         Vec3 lookVec = this.getLookAngle();
         Vec3 origin = this.position().add(lookVec.scale(vecScale));
@@ -506,9 +514,12 @@ public class SquamorphEntity extends Animal {
                 target.isAlive() && this.hasLineOfSight(target) && !this.isAlliedTo(target) && this != target);
 
         for (LivingEntity target: hit) {
-                target.hurt(target.damageSources().mobAttack(this), damage);
-                target.knockback(0.8D + 0.5D * kbMultiplier, this.getX() - target.getX(), this.getZ() - target.getZ());
-                count++;
+            target.hurt(target.damageSources().mobAttack(this), damage);
+            target.knockback(0.8D + 0.5D * kbMultiplier, this.getX() - target.getX(), this.getZ() - target.getZ());
+            element.applyElement(target, this, level, 1);
+            EntityHelpers.particleOnhitEffect(element.getTrailParticle(), target, this.level(), 1);
+
+            count++;
                 if (count >= maxHit)
                     break;
 
@@ -779,6 +790,30 @@ public class SquamorphEntity extends Animal {
 
     public int getAnimTicks() {
         return this.animTicks;
+    }
+
+    public SquamorphPart getCurrentMove() {
+        return this.currentMove;
+    }
+
+    public void resetMove() {
+        this.currentMove = null;
+    }
+
+    public void selectPart(LivingEntity target) {
+        for (SquamorphPart part: this.getMeleeParts()) {
+            if (part.canUseAbility(this, target)) {
+                this.currentMove = part;
+                return;
+            }
+        }
+        for (SquamorphPart part: this.getRangedParts()) {
+            if (part.canUseAbility(this, target)) {
+                this.currentMove = part;
+                return;
+            }
+        }
+        this.currentMove = null;
     }
 
     public ArrayList<SquamorphPart> getMeleeParts() {

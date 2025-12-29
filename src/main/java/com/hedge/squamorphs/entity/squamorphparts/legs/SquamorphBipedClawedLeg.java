@@ -3,7 +3,6 @@ package com.hedge.squamorphs.entity.squamorphparts.legs;
 import com.hedge.squamorphs.client.animations.squamorphAnimation;
 import com.hedge.squamorphs.entity.living.SquamorphEntity;
 import com.hedge.squamorphs.entity.util.EntityHelpers;
-import jdk.jfr.Percentage;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -42,6 +41,7 @@ public class SquamorphBipedClawedLeg extends SquamorphBipedLeg {
             entity.addCooldowns();
             entity.setLegCD(this.getCooldown());
             entity.setAttackState(0);
+            entity.resetMove();
         }
     }
 
@@ -52,7 +52,7 @@ public class SquamorphBipedClawedLeg extends SquamorphBipedLeg {
             owner.swing(InteractionHand.MAIN_HAND);
             owner.betterDoHurt(target, this.getDamage(owner), 1.0f);
             owner.getSecondaryElement().applyElement(target, owner, 1, 5);
-            EntityHelpers.particleOnhitEffect(owner.getSecondaryElement().getParticle(), target, owner.level(), 1);
+            EntityHelpers.particleOnhitEffect(owner.getSecondaryElement().getTrailParticle(), target, owner.level(), 1);
             owner.setAttackDirection(!owner.isAttackingLeft());
         }
     }

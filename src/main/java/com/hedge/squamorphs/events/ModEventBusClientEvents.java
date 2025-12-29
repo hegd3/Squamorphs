@@ -23,6 +23,6 @@ public class ModEventBusClientEvents {
         event.registerLayerDefinition(ModelLayers.PROJECTILE_LAYER, SquamorphProjectileModel::createBodyLayer);
         event.registerLayerDefinition(ModelLayers.FLY_LAYER, ElementalFlyModel::createBodyLayer);
         event.registerLayerDefinition(ModelLayers.SPIRIT_LAYER, ElementalSpiritModel::createBodyLayer);
-
     }
+
 }

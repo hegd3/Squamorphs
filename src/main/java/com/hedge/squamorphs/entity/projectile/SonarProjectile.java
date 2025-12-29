@@ -25,7 +25,7 @@ public class SonarProjectile extends SquamorphProjectile {
         super.onHitEntity(hit);
         if (this.getOwner() != null) {
             hit.getEntity().hurt(this.getOwner().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), 5 + this.getLvl() * 2);
-            this.element.applyElement(hit.getEntity(), (SquamorphEntity)this.getOwner(), this.getLvl(), 5);
+            this.element.applyElement(hit.getEntity(), (LivingEntity)this.getOwner(), this.getLvl(), 5);
         }
     }
 

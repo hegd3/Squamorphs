@@ -215,7 +215,7 @@ public abstract class SquamorphSummon extends PathfinderMob implements OwnableEn
 
     @Override
     public boolean doHurtTarget(Entity target) {
-        EntityHelpers.particleOnhitEffect(this.element.getParticle(), target, this.level(), 1);
+        EntityHelpers.particleOnhitEffect(this.element.getTrailParticle(), target, this.level(), 1);
         return super.doHurtTarget(target);
     }
 

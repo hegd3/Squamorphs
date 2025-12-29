@@ -209,11 +209,11 @@ public class SquamorphModel extends HierarchicalModel<SquamorphEntity> {
 
         if (legPart != null) {
             if (entity.isFlying()) {
-                this.animateWalk(squamorphAnimation.fly, limbSwing, limbSwingAmount, 4f, 2.5f);
+                this.animateWalk(squamorphAnimation.fly, limbSwing, limbSwingAmount, 2f, 2.5f);
             } else if (entity.isInFluidType()) {
-                this.animateWalk(squamorphAnimation.swim, limbSwing, limbSwingAmount, 4f, 2.5f);
+                this.animateWalk(squamorphAnimation.swim, limbSwing, limbSwingAmount, 2f, 2.5f);
             } else {
-                this.animateWalk(legPart.getWalk(), limbSwing, limbSwingAmount, 4f, legPart.getAnimSpeed());
+                this.animateWalk(legPart.getWalk(), limbSwing, limbSwingAmount, legPart.getAnimSpeed(), 2.5f);
             }
             this.animate(entity.idleAnimationState, entity.isFlying()? squamorphAnimation.fly : entity.isInFluidType() ? squamorphAnimation.swim_idle : legPart.getIdle(), ageInTicks, 1f);
 

@@ -35,28 +35,28 @@ public class SquamorphSwingingTail extends SquamorphTail {
             entity.addCooldowns();
             entity.setTailCD(this.getCooldown());
             entity.setAttackState(0);
+            entity.resetMove();
         }
     }
 
     @Override
     public void performMeleeAttack(SquamorphEntity owner, LivingEntity target, double dist) {
-
-        List<LivingEntity> hit = owner.aoeAttack(1.5, 2, 1, 2, this.getDamage(owner), 2, 10);
-        for (LivingEntity entity: hit) {
-            owner.getSecondaryElement().applyElement(entity, owner, 1, 5);
-            EntityHelpers.particleOnhitEffect(owner.getSecondaryElement().getParticle(), entity, owner.level(), 1);
-
-        }
+        owner.aoeAttack(1.5, 2, 1, 2, this.getDamage(owner), 2, 10, owner.getSecondaryElement(), owner.getTailLevel());
     }
 
     @Override
     public float getDamage(SquamorphEntity owner) {
-        return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 1.5f + (float)Math.pow(owner.getTailLevel(), 2) * 5;
+        return (float)owner.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 1.5f + (float)Math.pow(owner.getTailLevel(), 1.5);
     }
 
     @Override
     public AnimationDefinition getAbilityAnim(SquamorphEntity owner) {
         if (owner.isAttackingLeft()) return squamorphAnimation.tail_swipe_left;
         return squamorphAnimation.tail_swipe_right;
+    }
+
+    @Override
+    public boolean isImmobileWhenUsing(SquamorphEntity entity) {
+        return entity.getAnimTicks() < 16;
     }
 }

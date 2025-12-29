@@ -64,9 +64,9 @@ public class SquamorphAttackGoal extends Goal {
 
 
             if (entity.getAttackState() == 0) {
-                SquamorphPart currentAbility = selectPart(livingentity);
-                if (currentAbility != null) {
-                    entity.startAttackAnim(currentAbility.getAbilityAnimState());
+                entity.selectPart(livingentity);
+                if (entity.getCurrentMove() != null) {
+                    entity.startAttackAnim(entity.getCurrentMove().getAbilityAnimState());
                 }
             }
         }
@@ -186,16 +186,5 @@ public class SquamorphAttackGoal extends Goal {
         return this.entity.getBbWidth() * 8.0F * this.entity.getBbWidth() * 8.0F + pAttackTarget.getBbWidth();
     }
 
-    @Nullable
-    private SquamorphPart selectPart(LivingEntity target) {
-        for (SquamorphPart part: this.entity.getMeleeParts()) {
-            if (part.canUseAbility(this.entity, target))
-                return part;
-        }
-        for (SquamorphPart part: this.entity.getRangedParts()) {
-            if (part.canUseAbility(this.entity, target))
-                return part;
-        }
-        return null;
-    }
+
 }

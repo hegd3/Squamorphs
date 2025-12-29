@@ -79,6 +79,18 @@ public class SquamorphPart {
         return 0;
     }
 
+    public boolean isImmobileWhenUsing(SquamorphEntity entity) {
+        return false;
+    }
+
+    public boolean isInvulernableWhenUsing(SquamorphEntity entity) {
+        return false;
+    }
+
+    public float speedModifierWhenUsing(SquamorphEntity entity) {
+        return 0.0f;
+    }
+
 
 
 

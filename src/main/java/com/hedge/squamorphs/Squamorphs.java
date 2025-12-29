@@ -1,5 +1,6 @@
 package com.hedge.squamorphs;
 
+import com.hedge.squamorphs.client.particle.ModParticles;
 import com.hedge.squamorphs.client.renderer.*;
 import com.hedge.squamorphs.entity.ModEntities;
 import com.hedge.squamorphs.entity.living.summons.ElementalSpiritEntity;
@@ -31,20 +32,15 @@ public class Squamorphs
     public Squamorphs(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
-
-
-        ModCreativeModeTab.register(modEventBus);
-
-        ModItems.register(modEventBus);
-
-        // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
 
-        // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
         ModEntities.register(modEventBus);
-        //context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        ModCreativeModeTab.register(modEventBus);
+        ModItems.register(modEventBus);
+        ModParticles.register(modEventBus);
+
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

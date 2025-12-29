@@ -23,14 +23,14 @@ public class SquamorphMouthLayer extends RenderLayer<SquamorphEntity, SquamorphM
         if (index == 8 || index == 17)
             renderColoredCutoutModel(getParentModel(), AllTextures.MOUTH_TEXTURES[index], poseStack, buffer, packedLightIn, entity, 1.0f, 1.0f, 1.0f);
         else if (index >= 0) {
-                int color = entity.getMouth().getColor(entity);
+            int color = entity.getMouth().getColor(entity);
 
 
-                float r = (float) (color >> 16 & 255) / 255.0F;
-                float g = (float) (color >> 8 & 255) / 255.0F;
-                float b = (float) (color & 255) / 255.0F;
+            float r = (float) (color >> 16 & 255) / 255.0F;
+            float g = (float) (color >> 8 & 255) / 255.0F;
+            float b = (float) (color & 255) / 255.0F;
 
-                renderColoredCutoutModel(getParentModel(), AllTextures.MOUTH_TEXTURES[index], poseStack, buffer, packedLightIn, entity, r, g, b);
+            renderColoredCutoutModel(getParentModel(), AllTextures.MOUTH_TEXTURES[index], poseStack, buffer, packedLightIn, entity, r, g, b);
         }
 
 

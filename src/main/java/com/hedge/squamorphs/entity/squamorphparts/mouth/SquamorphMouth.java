@@ -34,7 +34,7 @@ public class SquamorphMouth extends SquamorphPart {
             owner.swing(InteractionHand.MAIN_HAND);
             if (owner.doHurtTarget(target)) {
                 owner.getPrimaryElement().applyElement(target, owner, 1, 5);
-                EntityHelpers.particleOnhitEffect(owner.getPrimaryElement().getParticle(), target, owner.level(), 1);
+                EntityHelpers.particleOnhitEffect(owner.getPrimaryElement().getTrailParticle(), target, owner.level(), 1);
             }
         }
     }
@@ -46,6 +46,7 @@ public class SquamorphMouth extends SquamorphPart {
             entity.addCooldowns();
             entity.setMouthCD(this.getCooldown());
             entity.setAttackState(0);
+            entity.resetMove();
         }
     }
 

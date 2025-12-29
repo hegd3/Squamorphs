@@ -1,8 +1,6 @@
 package com.hedge.squamorphs.entity.projectile;
 
-import com.hedge.squamorphs.entity.living.SquamorphEntity;
 import com.hedge.squamorphs.entity.util.EntityHelpers;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -25,7 +23,8 @@ public class BoltProjectile extends SquamorphProjectile {
         super.onHitEntity(hit);
         if (this.getOwner() != null) {
             hit.getEntity().hurt(this.getOwner().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), 3 + this.getLvl() * 3);
-            this.element.applyElement(hit.getEntity(), (SquamorphEntity)this.getOwner(), this.getLvl(), 5);
+            this.element.applyElement(hit.getEntity(), (LivingEntity)this.getOwner(), this.getLvl(), 5);
+            this.discard();
         }
     }
 
@@ -49,7 +48,7 @@ public class BoltProjectile extends SquamorphProjectile {
         for (int i = 0; i < c; i++) {
             Vec3 rand = EntityHelpers.getRandomVec3(0.02);
             Vec3 p = v.scale(f * i);
-            this.level().addParticle(this.element.getParticle(), this.getX() + rand.x + p.x,
+            this.level().addParticle(this.element.getTrailParticle(), this.getX() + rand.x + p.x,
                     this.getY() + rand.y + p.y, this.getZ() + rand.z + p.z, rand.x, rand.z, rand.y);
         }
     }

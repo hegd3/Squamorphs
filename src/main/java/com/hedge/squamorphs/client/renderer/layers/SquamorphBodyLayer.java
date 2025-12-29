@@ -20,7 +20,7 @@ public class SquamorphBodyLayer extends RenderLayer<SquamorphEntity, SquamorphMo
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLightIn, SquamorphEntity entity, float v, float v1, float v2, float v3, float v4, float v5) {
 
-        int color = entity.getBody().getColor(entity);
+        int color = entity.getPrimaryColor();
         float r = (float) (color >> 16 & 255) / 255.0F;
         float g = (float) (color >> 8 & 255) / 255.0F;
         float b = (float) (color & 255) / 255.0F;

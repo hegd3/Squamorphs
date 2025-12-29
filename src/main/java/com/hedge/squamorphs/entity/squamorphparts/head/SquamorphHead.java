@@ -77,6 +77,7 @@ public class SquamorphHead extends SquamorphPart {
             entity.addCooldowns();
             entity.setHeadCD(this.getCooldown());
             entity.setAttackState(0);
+            entity.resetMove();
         }
     }
 }

@@ -33,6 +33,7 @@ public class SquamorphWaggingTail extends SquamorphTail{
             entity.addCooldowns();
             entity.setTailCD(this.getCooldown());
             entity.setAttackState(0);
+            entity.resetMove();
 
         }
     }
